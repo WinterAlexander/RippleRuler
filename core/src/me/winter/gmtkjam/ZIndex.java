@@ -10,6 +10,7 @@ package me.winter.gmtkjam;
 public enum ZIndex
 {
 	WATER,
+	WAVE,
 	BOAT
 	;
 

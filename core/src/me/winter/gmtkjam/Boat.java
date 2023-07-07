@@ -2,7 +2,14 @@ package me.winter.gmtkjam;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 
 /**
  * Undocumented :(
@@ -15,32 +22,106 @@ public class Boat extends Entity
 {
 	private final TextureRegion boat;
 
-	private final Vector2 location = new Vector2();
-	private final Vector2 direction;
+	private final Body body;
 
-	public Boat(World world, Vector2 location)
+	public Boat(WaterWorld world, Vector2 location, Vector2 initialVelocity)
 	{
 		super(world);
 		this.boat = new TextureRegion(new Texture("boat.png"));
-		this.location.set(location);
-		this.direction = new Vector2(1.0f, 0.0f);
+
+		BodyDef bodyDef = new BodyDef();
+		bodyDef.type = BodyType.DynamicBody;
+
+		bodyDef.position.set(location);
+		body = world.getB2world().createBody(bodyDef);
+
+		PolygonShape polygon1 = new PolygonShape();
+		PolygonShape polygon2 = new PolygonShape();
+
+		float[] arr = new float[] {
+				7.5f / 15.0f, (16.0f -  0.5f) / 16.0f,
+				10.5f / 15.0f, (16.0f -  3.5f) / 16.0f,
+				11.5f / 15.0f, (16.0f -  5.5f) / 16.0f,
+				3.5f / 15.0f, (16.0f -  5.5f) / 16.0f,
+				4.5f / 15.0f, (16.0f -  3.5f) / 16.0f,
+		};
+
+		float[] arr2 = new float[] {
+				11.5f / 15.0f, (16.0f -  5.5f) / 16.0f,
+				11.5f / 15.0f, (16.0f - 11.5f) / 16.0f,
+				10.5f / 15.0f, (16.0f - 14.5f) / 16.0f,
+				9.5f / 15.0f, (16.0f - 15.5f) / 16.0f,
+				5.5f / 15.0f, (16.0f - 15.5f) / 16.0f,
+				4.5f / 15.0f, (16.0f - 14.5f) / 16.0f,
+				3.5f / 15.0f, (16.0f - 11.5f) / 16.0f,
+				3.5f / 15.0f, (16.0f -  5.5f) / 16.0f,
+		};
+
+		float[] rev = new float[arr.length];
+
+		for(int i = 0; i < arr.length; i += 2) {
+			rev[i] = arr[arr.length - i - 2] - 0.5f;
+			rev[i + 1] = arr[arr.length - i - 1] - 0.5f;
+		}
+
+		float[] rev2 = new float[arr2.length];
+
+		for(int i = 0; i < arr2.length; i += 2) {
+			rev2[i] = arr2[arr2.length - i - 2] - 0.5f;
+			rev2[i + 1] = arr2[arr2.length - i - 1] - 0.5f;
+		}
+
+		polygon1.set(rev);
+		polygon2.set(rev2);
+
+		FixtureDef fixtureDef = new FixtureDef();
+		fixtureDef.shape = polygon1;
+		fixtureDef.density = 0.5f;
+		fixtureDef.friction = 0.4f;
+		fixtureDef.restitution = 0.6f;
+
+		Fixture fixture = body.createFixture(fixtureDef);
+
+		polygon1.dispose();
+
+		FixtureDef fixtureDef2 = new FixtureDef();
+		fixtureDef2.shape = polygon2;
+		fixtureDef2.density = 0.5f;
+		fixtureDef2.friction = 0.4f;
+		fixtureDef2.restitution = 0.6f;
+
+		Fixture fixture2 = body.createFixture(fixtureDef2);
+
+		polygon2.dispose();
+
+		body.setLinearVelocity(initialVelocity);
 	}
 
 	@Override
 	public void render(GameScreen screen)
 	{
 		screen.getBatch().draw(boat,
-				location.x, location.y,
+				body.getPosition().x - 0.5f, body.getPosition().y - 0.5f,
 				0.5f, 0.5f,
 				1.0f, 1.0f,
 				1.0f, 1.0f,
-				direction.angleDeg(new Vector2(0.0f, 1.0f)));
+				MathUtils.radiansToDegrees * body.getAngle());
 	}
 
 	@Override
 	public void tick(float delta)
 	{
 
+	}
+
+	public Vector2 getLocation()
+	{
+		return body.getPosition();
+	}
+
+	public Body getBody()
+	{
+		return body;
 	}
 
 	@Override

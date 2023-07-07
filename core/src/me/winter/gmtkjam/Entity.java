@@ -9,9 +9,9 @@ package me.winter.gmtkjam;
  */
 public abstract class Entity
 {
-	private final World world;
+	private final WaterWorld world;
 
-	public Entity(World world)
+	public Entity(WaterWorld world)
 	{
 		this.world = world;
 	}
@@ -22,7 +22,7 @@ public abstract class Entity
 
 	public abstract ZIndex getZIndex();
 
-	public World getWorld()
+	public WaterWorld getWorld()
 	{
 		return world;
 	}

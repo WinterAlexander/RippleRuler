@@ -1,7 +1,6 @@
 package me.winter.gmtkjam;
 
 import com.badlogic.gdx.graphics.Texture;
-import me.winter.gdx.utils.math.VectorUtil;
 
 /**
  * Undocumented :(
@@ -14,7 +13,7 @@ public class Water extends Entity
 {
 	private final Texture water;
 
-	public Water(World world)
+	public Water(WaterWorld world)
 	{
 		super(world);
 		water = new Texture("water.png");
