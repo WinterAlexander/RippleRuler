@@ -41,6 +41,9 @@ public class WaterWorld
 		addEntity(new Rock(this, new Vector2(15.0f, 3.0f), 45.0f));
 		addEntity(new Rock(this, new Vector2(14.0f, 8.0f), 135.0f));
 		addEntity(new Rock(this, new Vector2(13.0f, 8.0f), 30.0f));
+
+		addEntity(new Dock(this, new Vector2(0.0f, 8.0f), 0.0f));
+		addEntity(new Dock(this, new Vector2(16.0f, 6.0f), 180.0f));
 	}
 
 	private void createBorders()

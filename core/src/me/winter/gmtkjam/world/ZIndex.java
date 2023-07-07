@@ -12,6 +12,7 @@ public enum ZIndex
 	WATER,
 	WAVE,
 	ROCK,
+	DOCK,
 	LOG,
 	BOAT
 	;
