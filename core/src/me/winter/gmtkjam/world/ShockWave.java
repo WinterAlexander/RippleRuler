@@ -1,8 +1,9 @@
-package me.winter.gmtkjam;
+package me.winter.gmtkjam.world;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import me.winter.gmtkjam.GameScreen;
 
 /**
  * Undocumented :(
@@ -56,12 +57,12 @@ public class ShockWave extends Entity
 
 		for(int i = 0; i < getWorld().getEntities().size; i++) {
 			Entity entity = getWorld().getEntities().get(i);
-			if(!(entity instanceof Boat))
+			if(!(entity instanceof Floating))
 				continue;
 
-			Boat boat = (Boat)entity;
+			Floating floating = (Floating)entity;
 
-			tmpVec2.set(boat.getLocation()).sub(location);
+			tmpVec2.set(floating.getBody().getPosition()).sub(location);
 
 			float dstToCenter = tmpVec2.len();
 
@@ -77,7 +78,7 @@ public class ShockWave extends Entity
 
 			tmpVec2.scl((float)Math.exp(-(dstToWave * dstToWave)) * peakWaveMagnitude);
 
-			boat.getBody().applyForce(tmpVec2, boat.getLocation(), true);
+			floating.getBody().applyForce(tmpVec2, floating.getBody().getPosition(), true);
 		}
 	}
 

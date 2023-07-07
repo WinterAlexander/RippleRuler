@@ -1,4 +1,4 @@
-package me.winter.gmtkjam;
+package me.winter.gmtkjam.world;
 
 /**
  * Undocumented :(
@@ -11,6 +11,8 @@ public enum ZIndex
 {
 	WATER,
 	WAVE,
+	ROCK,
+	LOG,
 	BOAT
 	;
 

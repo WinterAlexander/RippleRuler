@@ -1,6 +1,7 @@
-package me.winter.gmtkjam;
+package me.winter.gmtkjam.world;
 
 import com.badlogic.gdx.graphics.Texture;
+import me.winter.gmtkjam.GameScreen;
 
 /**
  * Undocumented :(

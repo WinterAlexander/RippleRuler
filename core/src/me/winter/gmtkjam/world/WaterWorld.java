@@ -1,4 +1,4 @@
-package me.winter.gmtkjam;
+package me.winter.gmtkjam.world;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import me.winter.gmtkjam.GameScreen;
 
 /**
  * Undocumented :(
@@ -31,9 +32,15 @@ public class WaterWorld
 		addEntity(new Boat(this,
 				new Vector2(8.0f, 4.5f),
 				new Vector2(1.0f, 0.0f)));
-		addEntity(new Boat(this,
+		addEntity(new Log(this,
 				new Vector2(12.0f, 4.5f),
+				90.0f,
 				new Vector2(-1.0f, 0.0f)));
+		addEntity(new Rock(this, new Vector2(3.0f, 3.0f), 80.0f));
+		addEntity(new Rock(this, new Vector2(10.0f, 3.0f), 0.0f));
+		addEntity(new Rock(this, new Vector2(15.0f, 3.0f), 45.0f));
+		addEntity(new Rock(this, new Vector2(14.0f, 8.0f), 135.0f));
+		addEntity(new Rock(this, new Vector2(13.0f, 8.0f), 30.0f));
 	}
 
 	private void createBorders()

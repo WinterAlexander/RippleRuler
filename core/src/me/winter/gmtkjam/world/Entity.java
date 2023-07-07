@@ -1,4 +1,6 @@
-package me.winter.gmtkjam;
+package me.winter.gmtkjam.world;
+
+import me.winter.gmtkjam.GameScreen;
 
 /**
  * Undocumented :(

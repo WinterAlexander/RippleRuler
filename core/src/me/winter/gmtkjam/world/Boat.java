@@ -1,4 +1,4 @@
-package me.winter.gmtkjam;
+package me.winter.gmtkjam.world;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import me.winter.gmtkjam.GameScreen;
 
 /**
  * Undocumented :(
@@ -18,7 +19,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
  *
  * @author Alexander Winter
  */
-public class Boat extends Entity
+public class Boat extends Entity implements Floating
 {
 	private final TextureRegion boat;
 
@@ -119,6 +120,7 @@ public class Boat extends Entity
 		return body.getPosition();
 	}
 
+	@Override
 	public Body getBody()
 	{
 		return body;
