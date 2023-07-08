@@ -124,8 +124,8 @@ public class Boat extends Entity implements Floating
 		FixtureDef fixtureDef2 = new FixtureDef();
 		fixtureDef2.shape = polygon2;
 		fixtureDef2.density = 0.5f;
-		fixtureDef2.friction = 0.4f;
-		fixtureDef2.restitution = 0.6f;
+		fixtureDef2.friction = 1.0f;
+		fixtureDef2.restitution = 0.0f;
 
 		Fixture fixture2 = body.createFixture(fixtureDef2);
 

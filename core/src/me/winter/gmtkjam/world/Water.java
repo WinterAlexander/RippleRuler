@@ -100,7 +100,7 @@ public class Water extends Entity
 	{
 		for(int i = 0; i < clouds.size; i++)
 		{
-			clouds.get(i).x -= 0.05f * delta * clouds.get(i).speed;
+			clouds.get(i).x -= 0.1f * delta * clouds.get(i).speed;
 		}
 
 		for(int x = 0; x < getWaterTileXCount(); x++)

@@ -62,13 +62,13 @@ public class Log extends Entity implements Floating
 		body = world.getB2world().createBody(bodyDef);
 
 		PolygonShape polygon = new PolygonShape();
-		polygon.setAsBox(0.2f * 16.0f, 0.5f * 16.0f);
+		polygon.setAsBox(3.0f, 7.0f);
 
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = polygon;
 		fixtureDef.density = 0.5f;
-		fixtureDef.friction = 0.4f;
-		fixtureDef.restitution = 0.6f;
+		fixtureDef.friction = 1.0f;
+		fixtureDef.restitution = 0.0f;
 
 		Fixture fixture = body.createFixture(fixtureDef);
 

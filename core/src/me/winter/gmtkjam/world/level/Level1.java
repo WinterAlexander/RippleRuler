@@ -18,7 +18,7 @@ public class Level1 implements Level
 	@Override
 	public void load(WaterWorld world)
 	{
-		world.addEntity(new Beach(world));
+		world.addEntity(new Beach(world, Beach.BeachPosition.TOP));
 		world.addEntity(new Boat(world,
 				new Vector2(1.0f * 16.0f, 4.5f * 16.0f),
 				-90.0f,

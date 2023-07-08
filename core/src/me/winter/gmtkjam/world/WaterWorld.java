@@ -12,9 +12,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import me.winter.gmtkjam.GameScreen;
-import me.winter.gmtkjam.world.level.Level;
-import me.winter.gmtkjam.world.level.Level1;
-import me.winter.gmtkjam.world.level.Level2;
+import me.winter.gmtkjam.world.level.*;
 
 import java.util.Random;
 
@@ -41,15 +39,19 @@ public class WaterWorld implements ContactListener
 
 	private final GameScreen screen;
 
-	private final Level[] levels = new Level[] {
+	public final Level[] levels = new Level[] {
 		new Level1(),
-		new Level2()
+		new Level2(),
+		new Level3(),
+		new Level4(),
 	};
 	private int currentLevelIndex = 0;
 
 	private final Random randomGenerator = new Random();
 
 	private float time = 0.0f;
+
+	private final Vector2 tmpVec2 = new Vector2();
 
 	public WaterWorld(GameScreen screen)
 	{
@@ -196,7 +198,30 @@ public class WaterWorld implements ContactListener
 	@Override
 	public void preSolve(Contact contact, Manifold oldManifold)
 	{
+		if(paused)
+			return;
 
+		Object objA = contact.getFixtureA().getBody().getUserData();
+		Object objB = contact.getFixtureB().getBody().getUserData();
+
+		if((objA instanceof Beach || objB instanceof Beach)
+				&& (objA instanceof Floating || objB instanceof Floating))
+		{
+			Floating boat = objA instanceof Floating ? (Floating)objA : (Floating)objB;
+
+			Beach beach = objA instanceof Beach ? (Beach)objA : (Beach)objB;
+
+			tmpVec2.set(boat.getBody().getLinearVelocity());
+
+			float dot = tmpVec2.dot(beach.getDirection());
+			if(dot > 0.0f)
+				return;
+
+			tmpVec2.mulAdd(beach.getDirection(), -dot);
+
+			boat.getBody().setLinearVelocity(tmpVec2.x, tmpVec2.y);
+			boat.getBody().setAngularVelocity(0.0f);
+		}
 	}
 
 	@Override
@@ -207,6 +232,7 @@ public class WaterWorld implements ContactListener
 
 		Object objA = contact.getFixtureA().getBody().getUserData();
 		Object objB = contact.getFixtureB().getBody().getUserData();
+
 		if(!(objA instanceof Boat) && !(objB instanceof Boat))
 			return;
 
