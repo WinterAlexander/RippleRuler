@@ -13,14 +13,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
  * @author Alexander Winter
  */
 public class LevelCompleteUI extends Window {
-    public LevelCompleteUI(Skin skin, Runnable retryAction, Runnable nextLevelAction) {
+    public LevelCompleteUI(Skin skin, float time, float score, Runnable retryAction, Runnable nextLevelAction) {
         super("", skin);
 
         setModal(true);
         setMovable(false);
         pad(20f);
 
-        add(new Label("You won", skin, "big")).padBottom(20f).row();
+        add(new Label("Level complete!", skin, "title")).padBottom(20f).row();
+        add(new Label("Time: " + time + " seconds", skin, "big")).padBottom(20f).row();
+        add(new Label("Score: " + score, skin, "big")).padBottom(20f).row();
 
         Table buttonRow = new Table();
 

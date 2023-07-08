@@ -78,7 +78,7 @@ public class ShockWave extends Entity
 
 			tmpVec2.scl((float)Math.exp(-(dstToWave * dstToWave)) * peakWaveMagnitude);
 
-			floating.getBody().applyForce(tmpVec2, floating.getBody().getPosition(), true);
+			floating.getBody().applyForceToCenter(tmpVec2, true);
 		}
 	}
 

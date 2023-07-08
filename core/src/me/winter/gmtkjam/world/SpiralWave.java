@@ -3,6 +3,7 @@ package me.winter.gmtkjam.world;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import me.winter.gmtkjam.GameScreen;
 
@@ -76,6 +77,7 @@ public class SpiralWave extends Entity
 				return;
 
 			tmpVec2.scl(1.0f / dstToCenter);
+
 			tmpVec2.scl(-0.5f);
 			tmpVec2.add(tmpVec2.y * 0.5f, -tmpVec2.x * 0.5f);
 
@@ -85,7 +87,24 @@ public class SpiralWave extends Entity
 
 			tmpVec2.scl((float)Math.exp(-(dstToWave * dstToWave)) * peakWaveMagnitude);
 
-			floating.getBody().applyForce(tmpVec2, floating.getBody().getPosition(), true);
+			floating.getBody().applyForceToCenter(tmpVec2, true);
+
+
+			float angle = floating.getBody().getAngle() * MathUtils.radiansToDegrees;
+			float waveAngle = tmpVec2.angleDeg();
+
+			float deltaAngle = waveAngle - angle;
+
+			while(deltaAngle > 180.0f)
+				deltaAngle -= 360.0f;
+
+			while(deltaAngle < -180.0f)
+				deltaAngle += 360.0f;
+
+			if(Math.abs(deltaAngle) > 5.0f)
+				deltaAngle = 5.0f * Math.signum(deltaAngle);
+
+			floating.getBody().applyAngularImpulse(deltaAngle * delta * MathUtils.degreesToRadians, true);
 		}
 	}
 

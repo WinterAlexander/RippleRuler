@@ -25,6 +25,8 @@ public class Boat extends Entity implements Floating
 
 	private final Body body;
 
+	private final Vector2 tmpVec2 = new Vector2();
+
 	public Boat(WaterWorld world, Vector2 location, float angle, Vector2 initialVelocity)
 	{
 		super(world);
@@ -98,6 +100,7 @@ public class Boat extends Entity implements Floating
 
 		body.setLinearVelocity(initialVelocity);
 		body.setUserData(this);
+		body.setAngularDamping(1.0f);
 	}
 
 	@Override
@@ -114,7 +117,20 @@ public class Boat extends Entity implements Floating
 	@Override
 	public void tick(float delta)
 	{
+		// set tmpVec2 to direction of the boat (unit vector)
+		tmpVec2.set(0.0f, 1.0f);
+		tmpVec2.rotateRad(body.getAngle());
 
+		// scale that direction by the dot product with lin vel
+		tmpVec2.scl(tmpVec2.dot(body.getLinearVelocity()));
+
+		// substract lin vel to get lin vel component perpendicular to boat direction
+		tmpVec2.sub(body.getLinearVelocity());
+
+		// scale for some smoothing factor
+		tmpVec2.scl(0.1f);
+
+		body.applyForceToCenter(tmpVec2, true);
 	}
 
 	public Vector2 getLocation()

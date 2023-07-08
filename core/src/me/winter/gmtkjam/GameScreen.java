@@ -171,9 +171,9 @@ public class GameScreen extends InputAdapter implements Screen
 		return true;
 	}
 
-	public void showLevelCompleteUI(Runnable nextLevelCallback, Runnable retryCallback)
+	public void showLevelCompleteUI(float time, float score, Runnable nextLevelCallback, Runnable retryCallback)
 	{
-		getStage().addActor(new LevelCompleteUI(skin, retryCallback, nextLevelCallback));
+		getStage().addActor(new LevelCompleteUI(skin, time, score, retryCallback, nextLevelCallback));
 	}
 
 	public void showLevelFailedUI(Runnable retryCallback)

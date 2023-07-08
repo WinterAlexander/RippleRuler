@@ -195,7 +195,7 @@ public class WaterWorld implements ContactListener
 		if(objA instanceof Dock || objB instanceof Dock)
 		{
 			paused = true;
-			screen.showLevelCompleteUI(this::nextLevel, this::retryLevel);
+			screen.showLevelCompleteUI(0.0f, 0.0f, this::nextLevel, this::retryLevel);
 			return;
 		}
 
