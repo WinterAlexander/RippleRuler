@@ -1,6 +1,7 @@
 package me.winter.gmtkjam;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import me.winter.gmtkjam.world.ShockWave;
+import me.winter.gmtkjam.world.SpiralWave;
 import me.winter.gmtkjam.world.WaterWorld;
 
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
@@ -111,8 +113,12 @@ public class GameScreen extends InputAdapter implements Screen
 				stage.getViewport().getScreenWidth(),
 				stage.getViewport().getScreenHeight());
 
-		getWorld().addEntity(new ShockWave(world,
-				new Vector2(tmpVec3.x, tmpVec3.y)));
+		if(button == Buttons.LEFT)
+			getWorld().addEntity(new ShockWave(world,
+					new Vector2(tmpVec3.x, tmpVec3.y)));
+		else
+			getWorld().addEntity(new SpiralWave(world,
+					new Vector2(tmpVec3.x, tmpVec3.y)));
 
 		return true;
 	}

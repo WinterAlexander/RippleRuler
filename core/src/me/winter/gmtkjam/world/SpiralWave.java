@@ -2,6 +2,7 @@ package me.winter.gmtkjam.world;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import me.winter.gmtkjam.GameScreen;
 
@@ -12,25 +13,26 @@ import me.winter.gmtkjam.GameScreen;
  *
  * @author Alexander Winter
  */
-public class ShockWave extends Entity
+public class SpiralWave extends Entity
 {
-	private final Texture wave;
+	private final TextureRegion wave;
 
 	private final Vector2 location;
 	private float radius = 0.0f;
 	private final float maxRadius = 5.0f;
+	private float angle = 0.0f;
 
 	private final Vector2 tmpVec2 = new Vector2();
 
 	private final float peakWaveMagnitude = 3.0f;
 	private final float rangeOfEffect = 0.5f;
 
-	public ShockWave(WaterWorld world, Vector2 location)
+	public SpiralWave(WaterWorld world, Vector2 location)
 	{
 		super(world);
 		this.location = location;
 
-		wave = new Texture("wave.png");
+		wave = new TextureRegion(new Texture("spiral_wave.png"));
 	}
 
 	@Override
@@ -40,7 +42,10 @@ public class ShockWave extends Entity
 		screen.getBatch().draw(wave,
 				location.x - radius,
 				location.y - radius,
-				radius * 2.0f, radius * 2.0f);
+				radius, radius,
+				radius * 2.0f, radius * 2.0f,
+				1.0f, 1.0f,
+				angle);
 		screen.getBatch().setColor(Color.WHITE);
 	}
 
@@ -48,6 +53,7 @@ public class ShockWave extends Entity
 	public void tick(float delta)
 	{
 		radius += delta * 2.0f;
+		angle += delta * 0.25f * 360.0f;
 
 		if(radius >= maxRadius)
 		{
@@ -70,7 +76,8 @@ public class ShockWave extends Entity
 				return;
 
 			tmpVec2.scl(1.0f / dstToCenter);
-
+			tmpVec2.scl(-0.5f);
+			tmpVec2.add(tmpVec2.y * 0.5f, -tmpVec2.x * 0.5f);
 
 			float dstToWave = dstToCenter - radius;
 
