@@ -12,6 +12,6 @@ public class GMTKJam extends Game
 	@Override
 	public void create()
 	{
-		setScreen(new GameScreen());
+		setScreen(new TitleScreen(this));
 	}
 }
