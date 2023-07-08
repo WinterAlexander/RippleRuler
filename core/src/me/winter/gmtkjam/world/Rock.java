@@ -40,7 +40,7 @@ public class Rock extends Entity
 		body = world.getB2world().createBody(bodyDef);
 
 		CircleShape circleShape = new CircleShape();
-		circleShape.setRadius(0.5f);
+		circleShape.setRadius(8f);
 
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = circleShape;
@@ -59,16 +59,16 @@ public class Rock extends Entity
 	{
 		if(zIndex == ZIndex.WAVE)
 			screen.getBatch().draw(rock_reflection,
-					body.getPosition().x - 0.75f, body.getPosition().y - 0.75f,
-					0.75f, 0.75f,
-					1.5f, 1.5f,
+					body.getPosition().x - 12.0f, body.getPosition().y - 12.0f,
+					12.0f, 12.0f,
+					24.0f, 24.0f,
 					1.0f, 1.0f,
 					MathUtils.radiansToDegrees * body.getAngle());
 		else
 			screen.getBatch().draw(rock,
-					body.getPosition().x - 0.75f, body.getPosition().y - 0.75f,
-					0.75f, 0.75f,
-					1.5f, 1.5f,
+					body.getPosition().x - 12.0f, body.getPosition().y - 12.0f,
+					12.0f, 12.0f,
+					24.0f, 24.0f,
 					1.0f, 1.0f,
 					MathUtils.radiansToDegrees * body.getAngle());
 	}

@@ -20,13 +20,13 @@ public class SpiralWave extends Entity
 
 	private final Vector2 location;
 	private float radius = 0.0f;
-	private final float maxRadius = 5.0f;
+	private final float maxRadius = 5.0f * 16.0f;
 	private float angle = 0.0f;
 
 	private final Vector2 tmpVec2 = new Vector2();
 
-	private final float peakWaveMagnitude = 3.0f;
-	private final float rangeOfEffect = 0.5f;
+	private final float peakWaveMagnitude = 3.0f * 16.0f * 16.0f;
+	private final float rangeOfEffect = 0.5f * 16.0f;
 
 	public SpiralWave(WaterWorld world, Vector2 location)
 	{
@@ -53,7 +53,7 @@ public class SpiralWave extends Entity
 	@Override
 	public void tick(float delta)
 	{
-		radius += delta * 2.0f;
+		radius += delta * 2.0f * 16.0f;
 		angle += delta * 0.25f * 360.0f;
 
 		if(radius >= maxRadius)

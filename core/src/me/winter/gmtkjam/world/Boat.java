@@ -43,36 +43,36 @@ public class Boat extends Entity implements Floating
 		PolygonShape polygon2 = new PolygonShape();
 
 		float[] arr = new float[] {
-				7.5f / 15.0f, (16.0f -  0.5f) / 16.0f,
-				10.5f / 15.0f, (16.0f -  3.5f) / 16.0f,
-				11.5f / 15.0f, (16.0f -  5.5f) / 16.0f,
-				3.5f / 15.0f, (16.0f -  5.5f) / 16.0f,
-				4.5f / 15.0f, (16.0f -  3.5f) / 16.0f,
+				7.5f, (16.0f -  0.5f),
+				10.5f, (16.0f -  3.5f),
+				11.5f, (16.0f -  5.5f),
+				3.5f, (16.0f -  5.5f),
+				4.5f, (16.0f -  3.5f),
 		};
 
 		float[] arr2 = new float[] {
-				11.5f / 15.0f, (16.0f -  5.5f) / 16.0f,
-				11.5f / 15.0f, (16.0f - 11.5f) / 16.0f,
-				10.5f / 15.0f, (16.0f - 14.5f) / 16.0f,
-				9.5f / 15.0f, (16.0f - 15.5f) / 16.0f,
-				5.5f / 15.0f, (16.0f - 15.5f) / 16.0f,
-				4.5f / 15.0f, (16.0f - 14.5f) / 16.0f,
-				3.5f / 15.0f, (16.0f - 11.5f) / 16.0f,
-				3.5f / 15.0f, (16.0f -  5.5f) / 16.0f,
+				11.5f, (16.0f -  5.5f),
+				11.5f, (16.0f - 11.5f),
+				10.5f, (16.0f - 14.5f),
+				9.5f, (16.0f - 15.5f),
+				5.5f, (16.0f - 15.5f),
+				4.5f, (16.0f - 14.5f),
+				3.5f, (16.0f - 11.5f),
+				3.5f, (16.0f -  5.5f),
 		};
 
 		float[] rev = new float[arr.length];
 
 		for(int i = 0; i < arr.length; i += 2) {
-			rev[i] = arr[arr.length - i - 2] - 0.5f;
-			rev[i + 1] = arr[arr.length - i - 1] - 0.5f;
+			rev[i] = arr[arr.length - i - 2] - 8f;
+			rev[i + 1] = arr[arr.length - i - 1] - 8f;
 		}
 
 		float[] rev2 = new float[arr2.length];
 
 		for(int i = 0; i < arr2.length; i += 2) {
-			rev2[i] = arr2[arr2.length - i - 2] - 0.5f;
-			rev2[i + 1] = arr2[arr2.length - i - 1] - 0.5f;
+			rev2[i] = arr2[arr2.length - i - 2] - 8f;
+			rev2[i + 1] = arr2[arr2.length - i - 1] - 8f;
 		}
 
 		polygon1.set(rev);
@@ -107,9 +107,9 @@ public class Boat extends Entity implements Floating
 	public void render(GameScreen screen, ZIndex zIndex)
 	{
 		screen.getBatch().draw(boat,
-				body.getPosition().x - 0.5f, body.getPosition().y - 0.5f,
-				0.5f, 0.5f,
-				1.0f, 1.0f,
+				body.getPosition().x - 7.5f, body.getPosition().y - 8f,
+				7.5f, 8f,
+				15f, 16f,
 				1.0f, 1.0f,
 				MathUtils.radiansToDegrees * body.getAngle());
 	}
@@ -128,9 +128,13 @@ public class Boat extends Entity implements Floating
 		tmpVec2.sub(body.getLinearVelocity());
 
 		// scale for some smoothing factor
-		tmpVec2.scl(0.1f);
+		tmpVec2.scl(50.0f);
 
 		body.applyForceToCenter(tmpVec2, true);
+
+
+
+		//getWorld().getWater().addWaterForce(tmpVec2.set(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY), );
 	}
 
 	public Vector2 getLocation()

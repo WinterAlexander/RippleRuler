@@ -41,7 +41,7 @@ public class Log extends Entity implements Floating
 		body = world.getB2world().createBody(bodyDef);
 
 		PolygonShape polygon = new PolygonShape();
-		polygon.setAsBox(0.2f, 0.5f);
+		polygon.setAsBox(0.2f * 16.0f, 0.5f * 16.0f);
 
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = polygon;
@@ -62,16 +62,16 @@ public class Log extends Entity implements Floating
 	{
 		if(zIndex == ZIndex.WAVE)
 			screen.getBatch().draw(log_waterreflect,
-					body.getPosition().x - 0.75f, body.getPosition().y - 0.75f,
-					0.75f, 0.75f,
-					1.5f, 1.5f,
+					body.getPosition().x - 12f, body.getPosition().y - 12f,
+					12f, 12f,
+					24f, 24f,
 					1.0f, 1.0f,
 					MathUtils.radiansToDegrees * body.getAngle());
 		else
 			screen.getBatch().draw(log,
-					body.getPosition().x - 0.5f, body.getPosition().y - 0.5f,
-					0.5f, 0.5f,
-					1.0f, 1.0f,
+					body.getPosition().x - 8.0f, body.getPosition().y - 8.0f,
+					8f, 8f,
+					16f, 16f,
 					1.0f, 1.0f,
 					MathUtils.radiansToDegrees * body.getAngle());
 	}

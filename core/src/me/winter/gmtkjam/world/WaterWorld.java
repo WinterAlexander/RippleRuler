@@ -27,6 +27,9 @@ import java.util.Random;
  */
 public class WaterWorld implements ContactListener
 {
+	public static final float WORLD_WIDTH = 256.0f;
+	public static final float WORLD_HEIGHT = 144.0f;
+
 	private final Array<Entity> entities = new Array<>();
 	private final Array<Entity> toRemove = new Array<>();
 	private final ObjectMap<ZIndex, Array<Entity>> entitiesByZIndex = new ObjectMap<>();
@@ -73,7 +76,7 @@ public class WaterWorld implements ContactListener
 
 			Body leftBorder = b2world.createBody(leftBorderDef);
 			EdgeShape leftEdge = new EdgeShape();
-			leftEdge.set(0.0f, 0.0f, 0.0f, 9.0f);
+			leftEdge.set(0.0f, 0.0f, 0.0f, WORLD_HEIGHT);
 
 			leftBorder.createFixture(leftEdge, 0.0f);
 			leftEdge.dispose();
@@ -85,7 +88,7 @@ public class WaterWorld implements ContactListener
 
 			Body rightBorder = b2world.createBody(rightBorderDef);
 			EdgeShape rightEdge = new EdgeShape();
-			rightEdge.set(16.0f, 0.0f, 16.0f, 9.0f);
+			rightEdge.set(WORLD_WIDTH, 0.0f, WORLD_WIDTH, WORLD_HEIGHT);
 
 			rightBorder.createFixture(rightEdge, 0.0f);
 			rightEdge.dispose();
@@ -97,7 +100,7 @@ public class WaterWorld implements ContactListener
 
 			Body topBorder = b2world.createBody(topBorderDef);
 			EdgeShape topEdge = new EdgeShape();
-			topEdge.set(0.0f, 9.0f, 16.0f, 9.0f);
+			topEdge.set(0.0f, WORLD_HEIGHT, WORLD_WIDTH, WORLD_HEIGHT);
 
 			topBorder.createFixture(topEdge, 0.0f);
 			topEdge.dispose();
@@ -109,7 +112,7 @@ public class WaterWorld implements ContactListener
 
 			Body bottomBorder = b2world.createBody(bottomBorderDef);
 			EdgeShape bottomEdge = new EdgeShape();
-			bottomEdge.set(0.0f, 0.0f, 16.0f, 0.0f);
+			bottomEdge.set(0.0f, 0.0f, WORLD_WIDTH, 0.0f);
 
 			bottomBorder.createFixture(bottomEdge, 0.0f);
 			bottomEdge.dispose();

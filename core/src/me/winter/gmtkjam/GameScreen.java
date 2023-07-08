@@ -51,8 +51,8 @@ public class GameScreen extends InputAdapter implements Screen
 		batch = new SpriteBatch();
 		world = new WaterWorld(this);
 
-		camera = new OrthographicCamera(16.0f, 9.0f);
-		camera.position.set(8.0f, 4.5f, 0.0f);
+		camera = new OrthographicCamera(256.0f, 144.0f);
+		camera.position.set(128f, 72f, 0.0f);
 		camera.update();
 		stage = new Stage(new FitViewport(1600f, 900f));
 

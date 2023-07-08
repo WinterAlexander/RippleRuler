@@ -17,12 +17,12 @@ public class ShockWave extends Entity
 
 	private final Vector2 location;
 	private float radius = 0.0f;
-	private final float maxRadius = 5.0f;
+	private final float maxRadius = 5.0f * 16.0f;
 
 	private final Vector2 tmpVec2 = new Vector2();
 
-	private final float peakWaveMagnitude = 0.25f;
-	private final float rangeOfEffect = 0.5f;
+	private final float peakWaveMagnitude = 2000f;
+	private final float rangeOfEffect = 0.5f * 16.0f;
 
 	public ShockWave(WaterWorld world, Vector2 location)
 	{
@@ -33,20 +33,12 @@ public class ShockWave extends Entity
 	}
 
 	@Override
-	public void render(GameScreen screen, ZIndex zIndex)
-	{
-		//screen.getBatch().setColor(1.0f, 1.0f, 1.0f, (maxRadius - radius) / maxRadius);
-		//screen.getBatch().draw(wave,
-		//		location.x - radius,
-		//		location.y - radius,
-		//		radius * 2.0f, radius * 2.0f);
-		//screen.getBatch().setColor(Color.WHITE);
-	}
+	public void render(GameScreen screen, ZIndex zIndex) {}
 
 	@Override
 	public void tick(float delta)
 	{
-		radius += delta * 2.0f;
+		radius += delta * 2.0f * 16.0f;
 
 		if(radius >= maxRadius)
 		{
@@ -81,11 +73,11 @@ public class ShockWave extends Entity
 		}
 
 
-		for(int x = 0; x < 160; x++)
+		for(int x = 0; x < getWorld().getWater().getWaterTileXCount(); x++)
 		{
-			for(int y = 0; y < 90; y++)
+			for(int y = 0; y < getWorld().getWater().getWaterTileYCount(); y++)
 			{
-				tmpVec2.set(x * 0.1f + 0.05f, y * 0.1f + 0.05f).sub(location);
+				tmpVec2.set(x + 0.5f, y + 0.5f).sub(location);
 
 				float dstToCenter = tmpVec2.len();
 

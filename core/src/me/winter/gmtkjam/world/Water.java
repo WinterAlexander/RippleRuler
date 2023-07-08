@@ -22,7 +22,7 @@ public class Water extends Entity
 	private final Color waterColor = new Color(0x6084ffFF);
 	private final Color waveColor = new Color(0xafc1ffFF);
 
-	private final float[][][] waterForce = new float[160][90][2];
+	private final float[][][] waterForce = new float[256][144][2];
 
 	private final Array<Cloud> clouds = new Array<>();
 
@@ -34,8 +34,8 @@ public class Water extends Entity
 
 		for(int i = 0; i < 8; i++)
 		{
-			float x = world.getRandomGenerator().nextFloat() * 18.0f;
-			float y = world.getRandomGenerator().nextFloat() * 9.0f;
+			float x = world.getRandomGenerator().nextFloat() * (256.0f + 24.0f);
+			float y = world.getRandomGenerator().nextFloat() * 144.0f;
 
 			boolean tooClose = false;
 
@@ -46,7 +46,7 @@ public class Water extends Entity
 
 				float dst2 = dx * dx + dy * dy;
 
-				if(dst2 < 16.0f)
+				if(dst2 < 64.0f * 64.0f)
 				{
 					tooClose = true;
 					break;
@@ -70,27 +70,26 @@ public class Water extends Entity
 		screen.getBatch().setColor(waterColor);
 		screen.getBatch().draw(water,
 				0.0f, 0.0f,
-				16.0f, 9.0f);
+				256.0f, 144.0f);
 
 		screen.getBatch().setColor(1.0f, 1.0f, 1.0f, 1.0f);
 		for(Cloud current : clouds)
-			screen.getBatch().draw(cloud, current.x - 2.0f, current.y - 0.75f, 2.0f, 1.5f);
+			screen.getBatch().draw(cloud, Math.round(current.x - 48f), Math.round(current.y - 32f), 48.0f, 32.0f);
 
-
-		for(int x = 0; x < 160; x++)
+		for(int x = 0; x < getWaterTileXCount(); x++)
 		{
-			for(int y = 0; y < 90; y++)
+			for(int y = 0; y < getWaterTileYCount(); y++)
 			{
 				float force = (float)Math.sqrt(waterForce[x][y][0] * waterForce[x][y][0] +
 						waterForce[x][y][1] * waterForce[x][y][1]);
 
-				if(force < 0.1f)
+				if(force < 400.0f)
 					continue;
 
 				screen.getBatch().setColor(waveColor);
 				screen.getBatch().draw(water,
-						x * 0.1f, y * 0.1f,
-						0.1f, 0.1f);
+						x, y,
+						1f, 1f);
 			}
 		}
 		screen.getBatch().setPackedColor(prev);
@@ -104,9 +103,9 @@ public class Water extends Entity
 			clouds.get(i).x -= 0.05f * delta * clouds.get(i).speed;
 		}
 
-		for(int x = 0; x < 160; x++)
+		for(int x = 0; x < getWaterTileXCount(); x++)
 		{
-			for(int y = 0; y < 90; y++)
+			for(int y = 0; y < getWaterTileYCount(); y++)
 			{
 				waterForce[x][y][0] = 0.0f;
 				waterForce[x][y][1] = 0.0f;
@@ -128,12 +127,12 @@ public class Water extends Entity
 
 	public int getWaterTileXCount()
 	{
-		return 160;
+		return 256;
 	}
 
 	public int getWaterTileYCount()
 	{
-		return 90;
+		return 144;
 	}
 
 	private static class Cloud

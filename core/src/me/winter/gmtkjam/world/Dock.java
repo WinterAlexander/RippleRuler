@@ -40,9 +40,9 @@ public class Dock extends Entity
 		body = world.getB2world().createBody(bodyDef);
 
 		PolygonShape polygonShape = new PolygonShape();
-		polygonShape.setAsBox(30.0f / 32.0f / 2.0f * 2.0f,
-							  16.0f / 32.0f / 2.0f * 2.0f,
-							  new Vector2(30.0f / 32.0f / 2.0f * 2.0f, 0.0f),
+		polygonShape.setAsBox(15.0f,
+							  8.0f,
+							  new Vector2(15.0f, 0.0f),
 							  0.0f);
 
 		FixtureDef fixtureDef = new FixtureDef();
@@ -64,16 +64,16 @@ public class Dock extends Entity
 
 		if(zIndex == ZIndex.WAVE)
 			screen.getBatch().draw(dock_waterreflection,
-					body.getPosition().x, body.getPosition().y - aspectRatio,
-					0.0f, aspectRatio,
-					2.0f, 2.0f * aspectRatio,
+					body.getPosition().x, body.getPosition().y - 16f * aspectRatio,
+					0.0f, 16f * aspectRatio,
+					32.0f, 32.0f * aspectRatio,
 					1.0f, 1.0f,
 					MathUtils.radiansToDegrees * body.getAngle());
 		else
 			screen.getBatch().draw(dock,
-					body.getPosition().x, body.getPosition().y - aspectRatio,
-					0.0f, aspectRatio,
-					2.0f, 2.0f * aspectRatio,
+					body.getPosition().x, body.getPosition().y - 16f * aspectRatio,
+					0.0f, 16.0f * aspectRatio,
+					32.0f, 32.0f * aspectRatio,
 					1.0f, 1.0f,
 					MathUtils.radiansToDegrees * body.getAngle());
 	}

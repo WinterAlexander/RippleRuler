@@ -11,6 +11,7 @@ public enum ZIndex
 {
 	WATER,
 	WAVE,
+	BEACH,
 	ROCK,
 	DOCK,
 	LOG,
