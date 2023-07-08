@@ -50,6 +50,7 @@ public class Rock extends Entity
 		Fixture fixture = body.createFixture(fixtureDef);
 
 		circleShape.dispose();
+		body.setUserData(this);
 	}
 
 	@Override

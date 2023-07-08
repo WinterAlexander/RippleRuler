@@ -51,6 +51,7 @@ public class Log extends Entity implements Floating
 		polygon.dispose();
 
 		body.setLinearVelocity(startVelocity);
+		body.setUserData(this);
 	}
 
 	@Override

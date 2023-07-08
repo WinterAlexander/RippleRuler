@@ -25,7 +25,7 @@ public class Boat extends Entity implements Floating
 
 	private final Body body;
 
-	public Boat(WaterWorld world, Vector2 location, Vector2 initialVelocity)
+	public Boat(WaterWorld world, Vector2 location, float angle, Vector2 initialVelocity)
 	{
 		super(world);
 		this.boat = new TextureRegion(new Texture("boat.png"));
@@ -34,6 +34,7 @@ public class Boat extends Entity implements Floating
 		bodyDef.type = BodyType.DynamicBody;
 
 		bodyDef.position.set(location);
+		bodyDef.angle = angle * MathUtils.degreesToRadians;
 		body = world.getB2world().createBody(bodyDef);
 
 		PolygonShape polygon1 = new PolygonShape();
@@ -96,6 +97,7 @@ public class Boat extends Entity implements Floating
 		polygon2.dispose();
 
 		body.setLinearVelocity(initialVelocity);
+		body.setUserData(this);
 	}
 
 	@Override

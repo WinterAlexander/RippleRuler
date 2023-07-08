@@ -3,11 +3,17 @@ package me.winter.gmtkjam.world;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.EdgeShape;
+import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import me.winter.gmtkjam.GameScreen;
+import me.winter.gmtkjam.world.level.Level;
+import me.winter.gmtkjam.world.level.Level1;
 
 /**
  * Undocumented :(
@@ -16,34 +22,34 @@ import me.winter.gmtkjam.GameScreen;
  *
  * @author Alexander Winter
  */
-public class WaterWorld
+public class WaterWorld implements ContactListener
 {
 	private final Array<Entity> entities = new Array<>();
 	private final Array<Entity> toRemove = new Array<>();
 	private final ObjectMap<ZIndex, Array<Entity>> entitiesByZIndex = new ObjectMap<>();
-	private final World b2world;
+	private World b2world = null;
 
-	public WaterWorld()
+	private boolean paused = false;
+
+	private final GameScreen screen;
+
+	public WaterWorld(GameScreen screen)
 	{
+		this.screen = screen;
+
+		loadLevel(new Level1());
+	}
+
+	public void loadLevel(Level level)
+	{
+		entities.clear();
+		entitiesByZIndex.clear();
+		toRemove.clear();
 		b2world = new World(Vector2.Zero, true);
+		b2world.setContactListener(this);
 		createBorders();
-
 		addEntity(new Water(this));
-		addEntity(new Boat(this,
-				new Vector2(8.0f, 4.5f),
-				new Vector2(1.0f, 0.0f)));
-		addEntity(new Log(this,
-				new Vector2(12.0f, 4.5f),
-				90.0f,
-				new Vector2(-1.0f, 0.0f)));
-		addEntity(new Rock(this, new Vector2(3.0f, 3.0f), 80.0f));
-		addEntity(new Rock(this, new Vector2(10.0f, 3.0f), 0.0f));
-		addEntity(new Rock(this, new Vector2(15.0f, 3.0f), 45.0f));
-		addEntity(new Rock(this, new Vector2(14.0f, 8.0f), 135.0f));
-		addEntity(new Rock(this, new Vector2(13.0f, 8.0f), 30.0f));
-
-		addEntity(new Dock(this, new Vector2(0.0f, 8.0f), 0.0f));
-		addEntity(new Dock(this, new Vector2(16.0f, 6.0f), 180.0f));
+		level.load(this);
 	}
 
 	private void createBorders()
@@ -107,6 +113,9 @@ public class WaterWorld
 
 	public void tick(float delta)
 	{
+		if(paused)
+			return;
+
 		for(int i = 0; i < entities.size; i++)
 			entities.get(i).tick(delta);
 
@@ -145,5 +154,56 @@ public class WaterWorld
 	public void removeEntity(Entity entity)
 	{
 		toRemove.add(entity);
+	}
+
+	@Override
+	public void beginContact(Contact contact)
+	{
+
+	}
+
+	@Override
+	public void endContact(Contact contact)
+	{
+
+	}
+
+	@Override
+	public void preSolve(Contact contact, Manifold oldManifold)
+	{
+
+	}
+
+	@Override
+	public void postSolve(Contact contact, ContactImpulse impulse)
+	{
+		Object objA = contact.getFixtureA().getBody().getUserData();
+		Object objB = contact.getFixtureB().getBody().getUserData();
+		if(!(objA instanceof Boat) && !(objB instanceof Boat))
+			return;
+
+		if(objA instanceof Dock || objB instanceof Dock)
+		{
+			paused = true;
+			screen.showVictoryUI(null, null);
+			return;
+		}
+
+		if(objA instanceof Log || objB instanceof Log || objA instanceof Rock || objB instanceof Rock)
+		{
+			paused = true;
+			screen.showDeathUI(null);
+			return;
+		}
+	}
+
+	public boolean isPaused()
+	{
+		return paused;
+	}
+
+	public void setPaused(boolean paused)
+	{
+		this.paused = paused;
 	}
 }

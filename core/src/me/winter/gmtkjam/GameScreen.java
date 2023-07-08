@@ -2,6 +2,7 @@ package me.winter.gmtkjam;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -14,6 +15,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import me.winter.gmtkjam.world.ShockWave;
 import me.winter.gmtkjam.world.SpiralWave;
 import me.winter.gmtkjam.world.WaterWorld;
+import me.winter.gmtkjam.world.level.Level1;
+import me.winter.gmtkjam.world.level.Level2;
 
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 
@@ -34,12 +37,13 @@ public class GameScreen extends InputAdapter implements Screen
 
 	private final Vector3 tmpVec3 = new Vector3();
 
-	Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
+	private boolean debug = false;
+	private final Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
 
 	public GameScreen()
 	{
 		batch = new SpriteBatch();
-		world = new WaterWorld();
+		world = new WaterWorld(this);
 
 		camera = new OrthographicCamera(16.0f, 9.0f);
 		camera.position.set(8.0f, 4.5f, 0.0f);
@@ -68,7 +72,8 @@ public class GameScreen extends InputAdapter implements Screen
 
 		batch.end();
 
-		debugRenderer.render(world.getB2world(), camera.combined);
+		if(debug)
+			debugRenderer.render(world.getB2world(), camera.combined);
 	}
 
 	@Override
@@ -93,6 +98,26 @@ public class GameScreen extends InputAdapter implements Screen
 	public void hide()
 	{
 
+	}
+
+	@Override
+	public boolean keyDown(int keycode)
+	{
+		if(keycode == Keys.NUM_1)
+		{
+			world.loadLevel(new Level1());
+			world.setPaused(false);
+		}
+		else if(keycode == Keys.NUM_2)
+		{
+			world.loadLevel(new Level2());
+			world.setPaused(false);
+		}
+		else if(keycode == Keys.F12)
+			debug = !debug;
+		else
+			return false;
+		return true;
 	}
 
 	@Override
@@ -133,6 +158,16 @@ public class GameScreen extends InputAdapter implements Screen
 		camera.update();
 
 		return true;
+	}
+
+	public void showVictoryUI(Runnable nextLevelCallback, Runnable retryCallback)
+	{
+		System.out.println("WON");
+	}
+
+	public void showDeathUI(Runnable retryCallback)
+	{
+		System.out.println("DEATH");
 	}
 
 	@Override

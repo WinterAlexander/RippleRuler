@@ -22,7 +22,7 @@ public class ShockWave extends Entity
 
 	private final Vector2 tmpVec2 = new Vector2();
 
-	private final float peakWaveMagnitude = 3.0f;
+	private final float peakWaveMagnitude = 0.25f;
 	private final float rangeOfEffect = 0.5f;
 
 	public ShockWave(WaterWorld world, Vector2 location)

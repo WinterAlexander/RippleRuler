@@ -53,6 +53,7 @@ public class Dock extends Entity
 		Fixture fixture = body.createFixture(fixtureDef);
 
 		polygonShape.dispose();
+		body.setUserData(this);
 	}
 
 	@Override
