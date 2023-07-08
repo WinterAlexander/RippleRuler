@@ -30,6 +30,8 @@ public class WaterWorld implements ContactListener
 	private final ObjectMap<ZIndex, Array<Entity>> entitiesByZIndex = new ObjectMap<>();
 	private World b2world = null;
 
+	private Water water = null;
+
 	private boolean paused = false;
 
 	private final GameScreen screen;
@@ -55,7 +57,7 @@ public class WaterWorld implements ContactListener
 		b2world = new World(Vector2.Zero, true);
 		b2world.setContactListener(this);
 		createBorders();
-		addEntity(new Water(this));
+		addEntity(water = new Water(this));
 		level.load(this);
 	}
 
@@ -230,5 +232,10 @@ public class WaterWorld implements ContactListener
 	public void setPaused(boolean paused)
 	{
 		this.paused = paused;
+	}
+
+	public Water getWater()
+	{
+		return water;
 	}
 }

@@ -36,12 +36,12 @@ public class ShockWave extends Entity
 	@Override
 	public void render(GameScreen screen)
 	{
-		screen.getBatch().setColor(1.0f, 1.0f, 1.0f, (maxRadius - radius) / maxRadius);
-		screen.getBatch().draw(wave,
-				location.x - radius,
-				location.y - radius,
-				radius * 2.0f, radius * 2.0f);
-		screen.getBatch().setColor(Color.WHITE);
+		//screen.getBatch().setColor(1.0f, 1.0f, 1.0f, (maxRadius - radius) / maxRadius);
+		//screen.getBatch().draw(wave,
+		//		location.x - radius,
+		//		location.y - radius,
+		//		radius * 2.0f, radius * 2.0f);
+		//screen.getBatch().setColor(Color.WHITE);
 	}
 
 	@Override
@@ -67,18 +67,35 @@ public class ShockWave extends Entity
 			float dstToCenter = tmpVec2.len();
 
 			if(dstToCenter == 0f)
-				return;
+				continue;
 
 			tmpVec2.scl(1.0f / dstToCenter);
 
-
 			float dstToWave = dstToCenter - radius;
-
 			dstToWave *= 2.0f / rangeOfEffect;
 
 			tmpVec2.scl((float)Math.exp(-(dstToWave * dstToWave)) * peakWaveMagnitude);
 
 			floating.getBody().applyForceToCenter(tmpVec2, true);
+		}
+
+
+		for(int x = 0; x < 160; x++)
+		{
+			for(int y = 0; y < 90; y++)
+			{
+				tmpVec2.set(x * 0.1f + 0.05f, y * 0.1f + 0.05f).sub(location);
+
+				float dstToCenter = tmpVec2.len();
+
+				if(dstToCenter == 0f)
+					continue;
+
+				float dstToWave = dstToCenter - radius;
+				dstToWave *= 2.0f / rangeOfEffect;
+
+				getWorld().getWater().addWaterHeight((float)Math.exp(-(dstToWave * dstToWave)) * peakWaveMagnitude, x, y);
+			}
 		}
 	}
 

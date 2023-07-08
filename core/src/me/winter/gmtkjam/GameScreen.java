@@ -162,6 +162,9 @@ public class GameScreen extends InputAdapter implements Screen
 	@Override
 	public boolean scrolled(float amountX, float amountY)
 	{
+		if(!debug)
+			return false;
+
 		if(amountY > 0.0f)
 			camera.zoom *= 2.0f;
 		else
