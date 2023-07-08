@@ -119,8 +119,16 @@ public class Water extends Entity
 		return new ZIndex[] { ZIndex.WATER };
 	}
 
+	public void addWaterForce(Vector2 waterForce, float x, float y)
+	{
+		addWaterForce(waterForce, Math.round(x), Math.round(y));
+	}
+
 	public void addWaterForce(Vector2 waterForce, int x, int y)
 	{
+		if(x < 0 || x >= getWaterTileXCount() || y < 0 || y >= getWaterTileYCount())
+			return;
+
 		this.waterForce[x][y][0] += waterForce.x;
 		this.waterForce[x][y][1] += waterForce.y;
 	}

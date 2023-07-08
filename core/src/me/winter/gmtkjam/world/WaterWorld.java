@@ -49,6 +49,8 @@ public class WaterWorld implements ContactListener
 
 	private final Random randomGenerator = new Random();
 
+	private float time = 0.0f;
+
 	public WaterWorld(GameScreen screen)
 	{
 		this.screen = screen;
@@ -58,6 +60,7 @@ public class WaterWorld implements ContactListener
 
 	public void loadLevel(Level level)
 	{
+		time = 0.0f;
 		entities.clear();
 		entitiesByZIndex.clear();
 		toRemove.clear();
@@ -134,6 +137,8 @@ public class WaterWorld implements ContactListener
 	{
 		if(paused)
 			return;
+
+		time += delta;
 
 		for(int i = 0; i < entities.size; i++)
 			entities.get(i).tick(delta);
@@ -252,5 +257,9 @@ public class WaterWorld implements ContactListener
 
 	public Random getRandomGenerator() {
 		return randomGenerator;
+	}
+
+	public float getTime() {
+		return time;
 	}
 }
