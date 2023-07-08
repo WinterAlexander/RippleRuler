@@ -74,7 +74,7 @@ public class Water extends Entity
 
 		screen.getBatch().setColor(1.0f, 1.0f, 1.0f, 1.0f);
 		for(Cloud current : clouds)
-			screen.getBatch().draw(cloud, Math.round(current.x - 48f), Math.round(current.y - 32f), 48.0f, 32.0f);
+			screen.getBatch().draw(cloud, /*Math.round(*/current.x - 48f/*)*/, /*Math.round(*/current.y - 32f/*)*/, 48.0f, 32.0f);
 
 		for(int x = 0; x < getWaterTileXCount(); x++)
 		{

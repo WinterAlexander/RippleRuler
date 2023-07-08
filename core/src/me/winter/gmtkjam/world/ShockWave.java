@@ -89,6 +89,7 @@ public class ShockWave extends Entity
 				dstToWave *= 2.0f / rangeOfEffect;
 
 				tmpVec2.scl((float)Math.exp(-(dstToWave * dstToWave)) * peakWaveMagnitude * strength);
+				tmpVec2.scl(0.25f);
 
 				getWorld().getWater().addWaterForce(tmpVec2, x, y);
 			}
