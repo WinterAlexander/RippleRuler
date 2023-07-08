@@ -48,9 +48,15 @@ public class Log extends Entity implements Floating
 			new Vector2(10.5f, 15.5f),
 	};
 
+	private final Array<ForceApplicationPoint> points = new Array<>();
+
 	public Log(WaterWorld world, Vector2 location, float angle, Vector2 startVelocity)
 	{
 		super(world);
+
+		points.add(new ForceApplicationPoint());
+		points.add(new ForceApplicationPoint());
+
 		log = new TextureRegion(new Texture("log.png"));
 		log_waterreflect = new TextureRegion(new Texture("log_waterreflection.png"));
 
@@ -154,5 +160,27 @@ public class Log extends Entity implements Floating
 	public ZIndex[] getZIndices()
 	{
 		return new ZIndex[] { ZIndex.LOG };
+	}
+
+	@Override
+	public Array<ForceApplicationPoint> getForceApplicationPoints() {
+
+		tmpVec2.set(0.0f, 7.0f);
+		tmpVec2.rotateRad(body.getAngle());
+		tmpVec2.add(body.getPosition());
+
+		points.get(0).x = tmpVec2.x;
+		points.get(0).y = tmpVec2.y;
+		points.get(0).weight = 0.5f;
+
+		tmpVec2.set(0.0f, -7.0f);
+		tmpVec2.rotateRad(body.getAngle());
+		tmpVec2.add(body.getPosition());
+
+		points.get(1).x = tmpVec2.x;
+		points.get(1).y = tmpVec2.y;
+		points.get(1).weight = 0.5f;
+
+		return points;
 	}
 }

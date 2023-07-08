@@ -116,7 +116,7 @@ public class GameScreen extends InputAdapter implements Screen
 	{
 		if(keycode >= Keys.NUM_1 && keycode <= Keys.NUM_9)
 		{
-			world.loadLevel(world.levels[(keycode - Keys.NUM_1) % world.levels.length]);
+			world.loadLevel((keycode - Keys.NUM_1) % world.levels.length);
 			world.setPaused(false);
 		}
 		else if(keycode == Keys.F12)
@@ -149,7 +149,8 @@ public class GameScreen extends InputAdapter implements Screen
 					new Vector2(tmpVec3.x, tmpVec3.y)));
 		else
 			getWorld().addEntity(new SpiralWave(world,
-					new Vector2(tmpVec3.x, tmpVec3.y)));
+					new Vector2(tmpVec3.x, tmpVec3.y),
+					Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)));
 
 		return true;
 	}

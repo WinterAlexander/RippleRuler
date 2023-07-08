@@ -19,18 +19,20 @@ public class SpiralWave extends Entity
 
 	private final Vector2 location;
 	private float radius = 0.0f;
-	private final float maxRadius = 5.0f * 16.0f;
+	private final float maxRadius = 4.0f * 16.0f;
 	private float angle = 0.0f;
 
 	private final Vector2 tmpVec2 = new Vector2();
 
-	private final float peakWaveMagnitude = 3.0f * 16.0f * 16.0f;
-	private final float rangeOfEffect = 0.5f * 16.0f;
+	private final float peakWaveMagnitude = 3.0f * 16.0f;
 
-	public SpiralWave(WaterWorld world, Vector2 location)
+	private final boolean clockwise;
+
+	public SpiralWave(WaterWorld world, Vector2 location, boolean clockwise)
 	{
 		super(world);
 		this.location = location;
+		this.clockwise = clockwise;
 
 		wave = new TextureRegion(new Texture("spiral_wave.png"));
 	}
@@ -42,7 +44,7 @@ public class SpiralWave extends Entity
 	public void tick(float delta)
 	{
 		radius += delta * 2.0f * 16.0f;
-		angle += delta * 0.25f * 360.0f;
+		angle += delta * 0.25f * 360.0f * (clockwise ? -1.0f : 1.0f);
 
 		if(radius >= maxRadius)
 		{
@@ -58,45 +60,30 @@ public class SpiralWave extends Entity
 
 			Floating floating = (Floating)entity;
 
-			tmpVec2.set(floating.getBody().getPosition()).sub(location);
+			for(Floating.ForceApplicationPoint point : floating.getForceApplicationPoints())
+			{
+				tmpVec2.set(point.x, point.y).sub(location);
 
-			float dstToCenter = tmpVec2.len();
+				float dstToCenter = tmpVec2.len();
 
-			if(dstToCenter == 0f)
-				return;
+				if(dstToCenter == 0f)
+					return;
 
-			tmpVec2.scl(1.0f / dstToCenter);
+				tmpVec2.scl(1.0f / dstToCenter).scl(-1.0f);
 
-			tmpVec2.scl(-0.5f);
-			tmpVec2.add(tmpVec2.y * 0.5f, -tmpVec2.x * 0.5f);
-
-			float dstToWave = dstToCenter - radius;
-
-			if(dstToCenter <= 0.0f)
-				dstToWave = 0.0f;
-
-			dstToWave += 1.0f;
-
-			tmpVec2.scl(peakWaveMagnitude * strength / dstToWave);
-
-			floating.getBody().applyForceToCenter(tmpVec2, true);
+				tmpVec2.set(tmpVec2.y * (clockwise ? -1.0f : 1.0f),
+						tmpVec2.x * (clockwise ? 1.0f : -1.0f));
 
 
-			float angle = floating.getBody().getAngle() * MathUtils.radiansToDegrees;
-			float waveAngle = tmpVec2.angleDeg();
+				float dstToWave = Math.min(10.0f * (radius - dstToCenter) / radius, 1.0f);
 
-			float deltaAngle = waveAngle - angle;
+				if(dstToWave <= 0.0f)
+					dstToWave = 0.0f;
 
-			while(deltaAngle > 180.0f)
-				deltaAngle -= 360.0f;
+				tmpVec2.scl(peakWaveMagnitude * strength * dstToWave * point.weight);
 
-			while(deltaAngle < -180.0f)
-				deltaAngle += 360.0f;
-
-			if(Math.abs(deltaAngle) > 5.0f)
-				deltaAngle = 5.0f * Math.signum(deltaAngle);
-
-			floating.getBody().applyAngularImpulse(deltaAngle * delta * MathUtils.degreesToRadians, true);
+				floating.getBody().applyLinearImpulse(tmpVec2.x, tmpVec2.y, point.x, point.y, true);
+			}
 		}
 
 		for(int x = 0; x < getWorld().getWater().getWaterTileXCount(); x++)
@@ -112,7 +99,8 @@ public class SpiralWave extends Entity
 					continue;
 				tmpVec2.scl(1.0f / dstToCenter);
 				tmpVec2.scl(-0.5f);
-				tmpVec2.add(tmpVec2.y * 0.5f, -tmpVec2.x * 0.5f);
+				tmpVec2.add(tmpVec2.y * 0.5f * (clockwise ? -1.0f : 1.0f),
+						tmpVec2.x * 0.5f * (clockwise ? 1.0f : -1.0f));
 
 				float dstToWave = dstToCenter - radius;
 
@@ -121,9 +109,9 @@ public class SpiralWave extends Entity
 
 				dstToWave += 1.0f;
 
-				tmpVec2.scl(peakWaveMagnitude * strength / dstToWave);
+				tmpVec2.scl(peakWaveMagnitude * strength * 16.0f / dstToWave);
 
-				float visualAngleFactor = (float)Math.max(0.0f, Math.sin(angle * 8.0f + dstToCenter));
+				float visualAngleFactor = (float)Math.max(0.0f, Math.sin(angle * 8.0f + dstToCenter * (clockwise ? -1.0f : 1.0f)));
 				tmpVec2.scl(visualAngleFactor).scl(2.0f);
 
 				getWorld().getWater().addWaterForce(tmpVec2, x, y);

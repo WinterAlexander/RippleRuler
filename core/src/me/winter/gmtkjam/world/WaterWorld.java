@@ -45,7 +45,7 @@ public class WaterWorld implements ContactListener
 		new Level3(),
 		new Level4(),
 	};
-	private int currentLevelIndex = 0;
+	public int currentLevelIndex = 0;
 
 	private final Random randomGenerator = new Random();
 
@@ -58,6 +58,12 @@ public class WaterWorld implements ContactListener
 		this.screen = screen;
 
 		loadLevel(new Level1());
+	}
+
+	public void loadLevel(int index)
+	{
+		currentLevelIndex = index;
+		loadLevel(levels[index]);
 	}
 
 	public void loadLevel(Level level)
@@ -239,7 +245,7 @@ public class WaterWorld implements ContactListener
 		if(objA instanceof Dock || objB instanceof Dock)
 		{
 			paused = true;
-			screen.showLevelCompleteUI(0.0f, 0.0f, this::nextLevel, this::retryLevel);
+			screen.showLevelCompleteUI(getTime(), 0.0f, this::nextLevel, this::retryLevel);
 			return;
 		}
 

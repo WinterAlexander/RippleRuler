@@ -32,6 +32,8 @@ public class Boat extends Entity implements Floating
 
 	private final Array<TrailPiece> trail = new Array<>();
 
+	private final Array<ForceApplicationPoint> points = new Array<>();
+
 	private final Vector2[] borderPixels = new Vector2[] {
 			new Vector2(7.5f, 0.5f),
 
@@ -64,6 +66,10 @@ public class Boat extends Entity implements Floating
 	{
 		super(world);
 		this.boat = new TextureRegion(new Texture("boat.png"));
+
+		points.add(new ForceApplicationPoint());
+		points.add(new ForceApplicationPoint());
+		points.add(new ForceApplicationPoint());
 
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
@@ -133,7 +139,7 @@ public class Boat extends Entity implements Floating
 
 		body.setLinearVelocity(initialVelocity);
 		body.setUserData(this);
-		body.setAngularDamping(1.0f);
+		body.setAngularDamping(10.0f);
 	}
 
 	@Override
@@ -210,4 +216,33 @@ public class Boat extends Entity implements Floating
 		return new ZIndex[] { ZIndex.BOAT };
 	}
 
+	@Override
+	public Array<ForceApplicationPoint> getForceApplicationPoints() {
+
+		tmpVec2.set(0.0f, 8.0f);
+		tmpVec2.rotateRad(body.getAngle());
+		tmpVec2.add(body.getPosition());
+
+		points.get(0).x = tmpVec2.x;
+		points.get(0).y = tmpVec2.y;
+		points.get(0).weight = 0.5f;
+
+		tmpVec2.set(0.0f, 0.0f);
+		tmpVec2.rotateRad(body.getAngle());
+		tmpVec2.add(body.getPosition());
+
+		points.get(2).x = tmpVec2.x;
+		points.get(2).y = tmpVec2.y;
+		points.get(2).weight = 0.3f;
+
+		tmpVec2.set(0.0f, -8.0f);
+		tmpVec2.rotateRad(body.getAngle());
+		tmpVec2.add(body.getPosition());
+
+		points.get(1).x = tmpVec2.x;
+		points.get(1).y = tmpVec2.y;
+		points.get(1).weight = 0.2f;
+
+		return points;
+	}
 }
