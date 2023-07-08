@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import me.winter.gmtkjam.GameScreen;
 import me.winter.gmtkjam.world.level.Level;
 import me.winter.gmtkjam.world.level.Level1;
+import me.winter.gmtkjam.world.level.Level2;
 
 /**
  * Undocumented :(
@@ -32,6 +33,12 @@ public class WaterWorld implements ContactListener
 	private boolean paused = false;
 
 	private final GameScreen screen;
+
+	private final Level[] levels = new Level[] {
+		new Level1(),
+		new Level2()
+	};
+	private int currentLevelIndex = 0;
 
 	public WaterWorld(GameScreen screen)
 	{
@@ -177,6 +184,9 @@ public class WaterWorld implements ContactListener
 	@Override
 	public void postSolve(Contact contact, ContactImpulse impulse)
 	{
+		if(paused)
+			return;
+
 		Object objA = contact.getFixtureA().getBody().getUserData();
 		Object objB = contact.getFixtureB().getBody().getUserData();
 		if(!(objA instanceof Boat) && !(objB instanceof Boat))
@@ -185,16 +195,31 @@ public class WaterWorld implements ContactListener
 		if(objA instanceof Dock || objB instanceof Dock)
 		{
 			paused = true;
-			screen.showVictoryUI(null, null);
+			screen.showLevelCompleteUI(this::nextLevel, this::retryLevel);
 			return;
 		}
 
-		if(objA instanceof Log || objB instanceof Log || objA instanceof Rock || objB instanceof Rock)
+		if(objA instanceof Log || objB instanceof Log
+				|| objA instanceof Rock || objB instanceof Rock)
 		{
 			paused = true;
-			screen.showDeathUI(null);
+			screen.showLevelFailedUI(this::retryLevel);
 			return;
 		}
+	}
+
+	public void retryLevel()
+	{
+		loadLevel(levels[currentLevelIndex]);
+		paused = false;
+	}
+
+	public void nextLevel()
+	{
+		currentLevelIndex++;
+		currentLevelIndex %= levels.length;
+		loadLevel(levels[currentLevelIndex]);
+		paused = false;
 	}
 
 	public boolean isPaused()

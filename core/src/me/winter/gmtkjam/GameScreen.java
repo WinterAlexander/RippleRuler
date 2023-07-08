@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -11,7 +12,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import me.winter.gmtkjam.ui.LevelFailedUI;
+import me.winter.gmtkjam.ui.LevelCompleteUI;
 import me.winter.gmtkjam.world.ShockWave;
 import me.winter.gmtkjam.world.SpiralWave;
 import me.winter.gmtkjam.world.WaterWorld;
@@ -40,6 +44,8 @@ public class GameScreen extends InputAdapter implements Screen
 	private boolean debug = false;
 	private final Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
 
+	private final Skin skin;
+
 	public GameScreen()
 	{
 		batch = new SpriteBatch();
@@ -49,18 +55,21 @@ public class GameScreen extends InputAdapter implements Screen
 		camera.position.set(8.0f, 4.5f, 0.0f);
 		camera.update();
 		stage = new Stage(new FitViewport(1600f, 900f));
+
+		skin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
 	}
 
 	@Override
 	public void show()
 	{
-		Gdx.input.setInputProcessor(this);
+		Gdx.input.setInputProcessor(new InputMultiplexer(stage, this));
 	}
 
 	@Override
 	public void render(float delta)
 	{
 		world.tick(delta);
+		stage.act(delta);
 
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);
@@ -71,6 +80,8 @@ public class GameScreen extends InputAdapter implements Screen
 		world.render(this);
 
 		batch.end();
+
+		stage.draw();
 
 		if(debug)
 			debugRenderer.render(world.getB2world(), camera.combined);
@@ -160,14 +171,19 @@ public class GameScreen extends InputAdapter implements Screen
 		return true;
 	}
 
-	public void showVictoryUI(Runnable nextLevelCallback, Runnable retryCallback)
+	public void showLevelCompleteUI(Runnable nextLevelCallback, Runnable retryCallback)
 	{
-		System.out.println("WON");
+		getStage().addActor(new LevelCompleteUI(skin, retryCallback, nextLevelCallback));
 	}
 
-	public void showDeathUI(Runnable retryCallback)
+	public void showLevelFailedUI(Runnable retryCallback)
 	{
-		System.out.println("DEATH");
+		getStage().addActor(new LevelFailedUI(skin, retryCallback));
+	}
+
+	public void showGameCompleteUI()
+	{
+
 	}
 
 	@Override
