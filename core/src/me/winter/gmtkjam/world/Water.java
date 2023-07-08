@@ -1,7 +1,12 @@
 package me.winter.gmtkjam.world;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import me.winter.gmtkjam.GameScreen;
 
 /**
@@ -13,34 +18,76 @@ import me.winter.gmtkjam.GameScreen;
  */
 public class Water extends Entity
 {
-	private final Texture water;
-	private final Color waterColor = new Color(0x4e6bcfFF);
-	private final Color tmpColor = new Color();
+	private final Texture water, cloud;
+	private final Color waterColor = new Color(0x6084ffFF);
+	private final Color waveColor = new Color(0xafc1ffFF);
 
-	private final float[][] waterHeight = new float[160][90];
+	private final float[][][] waterForce = new float[160][90][2];
+
+	private final Array<Cloud> clouds = new Array<>();
 
 	public Water(WaterWorld world)
 	{
 		super(world);
 		water = new Texture("pixel.png");
+		cloud = new Texture("cloud.png");
+
+		for(int i = 0; i < 8; i++)
+		{
+			float x = world.getRandomGenerator().nextFloat() * 18.0f;
+			float y = world.getRandomGenerator().nextFloat() * 9.0f;
+
+			boolean tooClose = false;
+
+			for(Cloud existingCloud : clouds)
+			{
+				float dx = existingCloud.x - x;
+				float dy = existingCloud.y - y;
+
+				float dst2 = dx * dx + dy * dy;
+
+				if(dst2 < 16.0f)
+				{
+					tooClose = true;
+					break;
+				}
+			}
+
+			if(tooClose) {
+				i--;
+				continue;
+			}
+
+			clouds.add(new Cloud(x, y, world.getRandomGenerator().nextFloat() + 1.0f));
+		}
 	}
 
 	@Override
-	public void render(GameScreen screen)
+	public void render(GameScreen screen, ZIndex zIndex)
 	{
-
 		float prev = screen.getBatch().getPackedColor();
+
+		screen.getBatch().setColor(waterColor);
+		screen.getBatch().draw(water,
+				0.0f, 0.0f,
+				16.0f, 9.0f);
+
+		screen.getBatch().setColor(1.0f, 1.0f, 1.0f, 1.0f);
+		for(Cloud current : clouds)
+			screen.getBatch().draw(cloud, current.x - 2.0f, current.y - 0.75f, 2.0f, 1.5f);
+
+
 		for(int x = 0; x < 160; x++)
 		{
 			for(int y = 0; y < 90; y++)
 			{
-				float height = waterHeight[x][y];
+				float force = (float)Math.sqrt(waterForce[x][y][0] * waterForce[x][y][0] +
+						waterForce[x][y][1] * waterForce[x][y][1]);
 
-				float whiteness = Math.min(Math.abs(height), 1.0f);
-				tmpColor.set(waterColor);
-				tmpColor.mul(1.0f - whiteness);
-				tmpColor.add(whiteness, whiteness, whiteness, whiteness);
-				screen.getBatch().setColor(tmpColor);
+				if(force < 0.1f)
+					continue;
+
+				screen.getBatch().setColor(waveColor);
 				screen.getBatch().draw(water,
 						x * 0.1f, y * 0.1f,
 						0.1f, 0.1f);
@@ -52,24 +99,31 @@ public class Water extends Entity
 	@Override
 	public void tick(float delta)
 	{
+		for(int i = 0; i < clouds.size; i++)
+		{
+			clouds.get(i).x -= 0.05f * delta * clouds.get(i).speed;
+		}
+
 		for(int x = 0; x < 160; x++)
 		{
 			for(int y = 0; y < 90; y++)
 			{
-				waterHeight[x][y] = 0.0f;
+				waterForce[x][y][0] = 0.0f;
+				waterForce[x][y][1] = 0.0f;
 			}
 		}
 	}
 
 	@Override
-	public ZIndex getZIndex()
+	public ZIndex[] getZIndices()
 	{
-		return ZIndex.WATER;
+		return new ZIndex[] { ZIndex.WATER };
 	}
 
-	public void addWaterHeight(float height, int x, int y)
+	public void addWaterForce(Vector2 waterForce, int x, int y)
 	{
-		waterHeight[x][y] += height;
+		this.waterForce[x][y][0] += waterForce.x;
+		this.waterForce[x][y][1] += waterForce.y;
 	}
 
 	public int getWaterTileXCount()
@@ -80,5 +134,16 @@ public class Water extends Entity
 	public int getWaterTileYCount()
 	{
 		return 90;
+	}
+
+	private static class Cloud
+	{
+		float x, y, speed;
+
+		public Cloud(float x, float y, float speed) {
+			this.x = x;
+			this.y = y;
+			this.speed = speed;
+		}
 	}
 }

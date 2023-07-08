@@ -16,6 +16,8 @@ import me.winter.gmtkjam.world.level.Level;
 import me.winter.gmtkjam.world.level.Level1;
 import me.winter.gmtkjam.world.level.Level2;
 
+import java.util.Random;
+
 /**
  * Undocumented :(
  * <p>
@@ -41,6 +43,8 @@ public class WaterWorld implements ContactListener
 		new Level2()
 	};
 	private int currentLevelIndex = 0;
+
+	private final Random randomGenerator = new Random();
 
 	public WaterWorld(GameScreen screen)
 	{
@@ -115,9 +119,12 @@ public class WaterWorld implements ContactListener
 	public void addEntity(Entity entity)
 	{
 		entities.add(entity);
-		if(!entitiesByZIndex.containsKey(entity.getZIndex()))
-			entitiesByZIndex.put(entity.getZIndex(), new Array<>());
-		entitiesByZIndex.get(entity.getZIndex()).add(entity);
+		for(ZIndex zIndex : entity.getZIndices())
+		{
+			if(!entitiesByZIndex.containsKey(zIndex))
+				entitiesByZIndex.put(zIndex, new Array<>());
+			entitiesByZIndex.get(zIndex).add(entity);
+		}
 	}
 
 	public void tick(float delta)
@@ -133,7 +140,8 @@ public class WaterWorld implements ContactListener
 			Entity entity = toRemove.get(i);
 
 			entities.removeValue(entity, true);
-			entitiesByZIndex.get(entity.getZIndex()).removeValue(entity, true);
+			for(ZIndex zIndex : entity.getZIndices())
+				entitiesByZIndex.get(zIndex).removeValue(entity, true);
 		}
 
 		b2world.step(delta, 6, 2);
@@ -146,7 +154,7 @@ public class WaterWorld implements ContactListener
 			if(!entitiesByZIndex.containsKey(zIndex))
 				continue;
 			for(int i = 0; i < entitiesByZIndex.get(zIndex).size; i++)
-				entitiesByZIndex.get(zIndex).get(i).render(screen);
+				entitiesByZIndex.get(zIndex).get(i).render(screen, zIndex);
 		}
 	}
 
@@ -237,5 +245,9 @@ public class WaterWorld implements ContactListener
 	public Water getWater()
 	{
 		return water;
+	}
+
+	public Random getRandomGenerator() {
+		return randomGenerator;
 	}
 }

@@ -37,7 +37,7 @@ public class SpiralWave extends Entity
 	}
 
 	@Override
-	public void render(GameScreen screen)
+	public void render(GameScreen screen, ZIndex zIndex)
 	{
 		screen.getBatch().setColor(1.0f, 1.0f, 1.0f, (maxRadius - radius) / maxRadius);
 		screen.getBatch().draw(wave,
@@ -109,8 +109,8 @@ public class SpiralWave extends Entity
 	}
 
 	@Override
-	public ZIndex getZIndex()
+	public ZIndex[] getZIndices()
 	{
-		return ZIndex.WAVE;
+		return new ZIndex[] { ZIndex.WAVE };
 	}
 }

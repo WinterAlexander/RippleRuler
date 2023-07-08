@@ -104,7 +104,7 @@ public class Boat extends Entity implements Floating
 	}
 
 	@Override
-	public void render(GameScreen screen)
+	public void render(GameScreen screen, ZIndex zIndex)
 	{
 		screen.getBatch().draw(boat,
 				body.getPosition().x - 0.5f, body.getPosition().y - 0.5f,
@@ -145,8 +145,8 @@ public class Boat extends Entity implements Floating
 	}
 
 	@Override
-	public ZIndex getZIndex()
+	public ZIndex[] getZIndices()
 	{
-		return ZIndex.BOAT;
+		return new ZIndex[] { ZIndex.BOAT };
 	}
 }

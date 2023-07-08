@@ -21,7 +21,7 @@ import me.winter.gmtkjam.GameScreen;
  */
 public class Log extends Entity implements Floating
 {
-	private final TextureRegion log;
+	private final TextureRegion log, log_waterreflect;
 
 	private final Body body;
 
@@ -31,6 +31,7 @@ public class Log extends Entity implements Floating
 	{
 		super(world);
 		log = new TextureRegion(new Texture("log.png"));
+		log_waterreflect = new TextureRegion(new Texture("log_waterreflection.png"));
 
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
@@ -57,14 +58,22 @@ public class Log extends Entity implements Floating
 	}
 
 	@Override
-	public void render(GameScreen screen)
+	public void render(GameScreen screen, ZIndex zIndex)
 	{
-		screen.getBatch().draw(log,
-				body.getPosition().x - 0.5f, body.getPosition().y - 0.5f,
-				0.5f, 0.5f,
-				1.0f, 1.0f,
-				1.0f, 1.0f,
-				MathUtils.radiansToDegrees * body.getAngle());
+		if(zIndex == ZIndex.WAVE)
+			screen.getBatch().draw(log_waterreflect,
+					body.getPosition().x - 0.75f, body.getPosition().y - 0.75f,
+					0.75f, 0.75f,
+					1.5f, 1.5f,
+					1.0f, 1.0f,
+					MathUtils.radiansToDegrees * body.getAngle());
+		else
+			screen.getBatch().draw(log,
+					body.getPosition().x - 0.5f, body.getPosition().y - 0.5f,
+					0.5f, 0.5f,
+					1.0f, 1.0f,
+					1.0f, 1.0f,
+					MathUtils.radiansToDegrees * body.getAngle());
 	}
 
 	@Override
@@ -92,9 +101,10 @@ public class Log extends Entity implements Floating
 		return body;
 	}
 
+
 	@Override
-	public ZIndex getZIndex()
+	public ZIndex[] getZIndices()
 	{
-		return ZIndex.LOG;
+		return new ZIndex[] { ZIndex.LOG, ZIndex.WAVE };
 	}
 }

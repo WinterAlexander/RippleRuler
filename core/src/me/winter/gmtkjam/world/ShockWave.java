@@ -1,6 +1,5 @@
 package me.winter.gmtkjam.world;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import me.winter.gmtkjam.GameScreen;
@@ -34,7 +33,7 @@ public class ShockWave extends Entity
 	}
 
 	@Override
-	public void render(GameScreen screen)
+	public void render(GameScreen screen, ZIndex zIndex)
 	{
 		//screen.getBatch().setColor(1.0f, 1.0f, 1.0f, (maxRadius - radius) / maxRadius);
 		//screen.getBatch().draw(wave,
@@ -55,6 +54,8 @@ public class ShockWave extends Entity
 			return;
 		}
 
+		float strength = Math.min(4.0f * (maxRadius - radius) / maxRadius, 1.0f);
+
 		for(int i = 0; i < getWorld().getEntities().size; i++) {
 			Entity entity = getWorld().getEntities().get(i);
 			if(!(entity instanceof Floating))
@@ -74,7 +75,7 @@ public class ShockWave extends Entity
 			float dstToWave = dstToCenter - radius;
 			dstToWave *= 2.0f / rangeOfEffect;
 
-			tmpVec2.scl((float)Math.exp(-(dstToWave * dstToWave)) * peakWaveMagnitude);
+			tmpVec2.scl((float)Math.exp(-(dstToWave * dstToWave)) * peakWaveMagnitude * strength);
 
 			floating.getBody().applyForceToCenter(tmpVec2, true);
 		}
@@ -90,18 +91,21 @@ public class ShockWave extends Entity
 
 				if(dstToCenter == 0f)
 					continue;
+				tmpVec2.scl(1.0f / dstToCenter);
 
 				float dstToWave = dstToCenter - radius;
 				dstToWave *= 2.0f / rangeOfEffect;
 
-				getWorld().getWater().addWaterHeight((float)Math.exp(-(dstToWave * dstToWave)) * peakWaveMagnitude, x, y);
+				tmpVec2.scl((float)Math.exp(-(dstToWave * dstToWave)) * peakWaveMagnitude * strength);
+
+				getWorld().getWater().addWaterForce(tmpVec2, x, y);
 			}
 		}
 	}
 
 	@Override
-	public ZIndex getZIndex()
+	public ZIndex[] getZIndices()
 	{
-		return ZIndex.WAVE;
+		return new ZIndex[] { ZIndex.WAVE };
 	}
 }

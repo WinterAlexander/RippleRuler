@@ -18,11 +18,11 @@ public abstract class Entity
 		this.world = world;
 	}
 
-	public abstract void render(GameScreen screen);
+	public abstract void render(GameScreen screen, ZIndex zIndex);
 
 	public abstract void tick(float delta);
 
-	public abstract ZIndex getZIndex();
+	public abstract ZIndex[] getZIndices();
 
 	public WaterWorld getWorld()
 	{

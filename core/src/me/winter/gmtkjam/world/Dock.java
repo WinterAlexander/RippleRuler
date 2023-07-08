@@ -21,7 +21,7 @@ import me.winter.gmtkjam.GameScreen;
  */
 public class Dock extends Entity
 {
-	private final TextureRegion dock;
+	private final TextureRegion dock, dock_waterreflection;
 
 	private final Body body;
 
@@ -30,6 +30,7 @@ public class Dock extends Entity
 		super(world);
 
 		dock = new TextureRegion(new Texture("dock.png"));
+		dock_waterreflection = new TextureRegion(new Texture("dock_waterreflection.png"));
 
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.StaticBody;
@@ -57,16 +58,24 @@ public class Dock extends Entity
 	}
 
 	@Override
-	public void render(GameScreen screen)
+	public void render(GameScreen screen, ZIndex zIndex)
 	{
 		float aspectRatio = 3.0f / 4.0f;
 
-		screen.getBatch().draw(dock,
-				body.getPosition().x, body.getPosition().y - aspectRatio,
-				0.0f, aspectRatio,
-				2.0f, 2.0f * aspectRatio,
-				1.0f, 1.0f,
-				MathUtils.radiansToDegrees * body.getAngle());
+		if(zIndex == ZIndex.WAVE)
+			screen.getBatch().draw(dock_waterreflection,
+					body.getPosition().x, body.getPosition().y - aspectRatio,
+					0.0f, aspectRatio,
+					2.0f, 2.0f * aspectRatio,
+					1.0f, 1.0f,
+					MathUtils.radiansToDegrees * body.getAngle());
+		else
+			screen.getBatch().draw(dock,
+					body.getPosition().x, body.getPosition().y - aspectRatio,
+					0.0f, aspectRatio,
+					2.0f, 2.0f * aspectRatio,
+					1.0f, 1.0f,
+					MathUtils.radiansToDegrees * body.getAngle());
 	}
 
 	@Override
@@ -76,8 +85,8 @@ public class Dock extends Entity
 	}
 
 	@Override
-	public ZIndex getZIndex()
+	public ZIndex[] getZIndices()
 	{
-		return ZIndex.DOCK;
+		return new ZIndex[] { ZIndex.DOCK, ZIndex.WAVE };
 	}
 }

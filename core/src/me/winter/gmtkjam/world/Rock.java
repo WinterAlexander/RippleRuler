@@ -21,7 +21,7 @@ import me.winter.gmtkjam.GameScreen;
  */
 public class Rock extends Entity
 {
-	private final TextureRegion rock;
+	private final TextureRegion rock, rock_reflection;
 
 	private final Body body;
 
@@ -30,6 +30,7 @@ public class Rock extends Entity
 		super(world);
 
 		rock = new TextureRegion(new Texture("rock.png"));
+		rock_reflection = new TextureRegion(new Texture("rock_waterreflection.png"));
 
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.StaticBody;
@@ -54,14 +55,22 @@ public class Rock extends Entity
 	}
 
 	@Override
-	public void render(GameScreen screen)
+	public void render(GameScreen screen, ZIndex zIndex)
 	{
-		screen.getBatch().draw(rock,
-				body.getPosition().x - 0.5f, body.getPosition().y - 0.5f,
-				0.5f, 0.5f,
-				1.0f, 1.0f,
-				1.0f, 1.0f,
-				MathUtils.radiansToDegrees * body.getAngle());
+		if(zIndex == ZIndex.WAVE)
+			screen.getBatch().draw(rock_reflection,
+					body.getPosition().x - 0.75f, body.getPosition().y - 0.75f,
+					0.75f, 0.75f,
+					1.5f, 1.5f,
+					1.0f, 1.0f,
+					MathUtils.radiansToDegrees * body.getAngle());
+		else
+			screen.getBatch().draw(rock,
+					body.getPosition().x - 0.75f, body.getPosition().y - 0.75f,
+					0.75f, 0.75f,
+					1.5f, 1.5f,
+					1.0f, 1.0f,
+					MathUtils.radiansToDegrees * body.getAngle());
 	}
 
 	@Override
@@ -71,8 +80,8 @@ public class Rock extends Entity
 	}
 
 	@Override
-	public ZIndex getZIndex()
+	public ZIndex[] getZIndices()
 	{
-		return ZIndex.ROCK;
+		return new ZIndex[] { ZIndex.ROCK, ZIndex.WAVE };
 	}
 }
