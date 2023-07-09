@@ -56,7 +56,7 @@ public class TitleScreen extends InputAdapter implements Screen {
 
         stage.addActor(start);
 
-        Label credits = new Label("Game made by Alexander Winter for the GMTK 2023 game jam\nFonts and UI graphics taken from https://github.com/czyzby/gdx-skins", skin, "big");
+        Label credits = new Label("Game made in 48 hours by Alexander Winter for the GMTK 2023 game jam\nFonts and UI graphics taken from https://github.com/czyzby/gdx-skins", skin, "big");
         stage.addActor(credits);
     }
 

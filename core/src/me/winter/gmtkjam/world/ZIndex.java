@@ -15,7 +15,8 @@ public enum ZIndex
 	ROCK,
 	DOCK,
 	LOG,
-	BOAT
+	BOAT,
+	TUTORIAL_TEXT
 	;
 
 	public static final ZIndex[] values = values();

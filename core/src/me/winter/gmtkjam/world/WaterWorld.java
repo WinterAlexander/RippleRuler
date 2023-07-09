@@ -365,4 +365,8 @@ public class WaterWorld implements ContactListener
 		}
 		lastSpawnedWave = time;
 	}
+
+	public GameScreen getScreen() {
+		return screen;
+	}
 }

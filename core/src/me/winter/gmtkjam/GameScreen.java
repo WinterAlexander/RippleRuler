@@ -52,6 +52,8 @@ public class GameScreen extends InputAdapter implements Screen
 	public GameScreen(GMTKJam game)
 	{
 		this.game = game;
+
+		skin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
 		batch = new SpriteBatch();
 		world = new WaterWorld(this);
 
@@ -60,8 +62,6 @@ public class GameScreen extends InputAdapter implements Screen
 		camera.update();
 		stage = new Stage(new FitViewport(1600f, 900f));
 		stage.addActor(new WaveSelector(this));
-
-		skin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
 
 		click = Gdx.audio.newSound(Gdx.files.internal("click.ogg"));
 	}
@@ -225,5 +225,9 @@ public class GameScreen extends InputAdapter implements Screen
 
 	public GMTKJam getGame() {
 		return game;
+	}
+
+	public Skin getSkin() {
+		return skin;
 	}
 }
