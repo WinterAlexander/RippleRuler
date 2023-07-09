@@ -158,6 +158,8 @@ public class GameScreen extends InputAdapter implements Screen
 				stage.getViewport().getScreenWidth(),
 				stage.getViewport().getScreenHeight());
 
+		System.out.println(tmpVec3.x + ", " + tmpVec3.y);
+
 		getWorld().spawnWave(waveType, tmpVec3.x, tmpVec3.y);
 
 		return true;

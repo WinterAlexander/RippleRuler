@@ -34,18 +34,18 @@ public class GameCompleteUI extends Window {
         float bestTime = screen.getGame().getPreferences().getFloat(timeKey, Float.NaN);
         float bestScore = screen.getGame().getPreferences().getFloat(scoreKey, Float.NaN);
 
+        add(new Label("Time: " + Stringf.format("%.3f", time) + " seconds" + (isNaN(bestTime) ? "" : " (Best: " + Stringf.format("%.3f", bestTime) + " seconds)"), skin, "big")).padBottom(20f).row();
+        add(new Label("Score: " + score + (isNaN(bestScore) ? "" : " (Best: " + bestScore + ")"), skin, "big")).padBottom(20f).row();
+        add(new Label("Score is higher the less ripples you use to complete the level. Feel free to beat your best time or best score.", skin))
+                .padBottom(20f).fill().getActor().setWrap(true);
+        row();
+
         bestTime = isNaN(bestTime) ? time : Math.min(bestTime, time);
         bestScore = isNaN(bestScore) ?  score : Math.max(bestScore, score);
 
         screen.getGame().getPreferences().putFloat(timeKey, bestTime);
         screen.getGame().getPreferences().putFloat(scoreKey, bestScore);
         screen.getGame().getPreferences().flush();
-
-        add(new Label("Time: " + Stringf.format("%.3f", time) + " seconds" + (isNaN(bestTime) ? "" : " (Best: " + Stringf.format("%.3f", bestTime) + " seconds)"), skin, "big")).padBottom(20f).row();
-        add(new Label("Score: " + score + (isNaN(bestScore) ? "" : " (Best: " + bestScore + ")"), skin, "big")).padBottom(20f).row();
-        add(new Label("Score is higher the less ripples you use to complete the level. Feel free to beat your best time or best score.", skin))
-                .padBottom(20f).fill().getActor().setWrap(true);
-        row();
 
         Table buttonRow = new Table();
 
