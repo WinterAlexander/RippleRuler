@@ -82,9 +82,14 @@ public class SpiralWave extends Entity
 			}
 		}
 
-		for(int x = 0; x < getWorld().getWater().getWaterTileXCount(); x++)
+		int minX = Math.max(Math.round(location.x - radius - 2.0f), 0);
+		int maxX = Math.min(Math.round(location.x + radius + 2.0f), getWorld().getWater().getWaterTileXCount() - 1);
+		int minY = Math.max(Math.round(location.y - radius - 2.0f), 0);
+		int maxY = Math.min(Math.round(location.y + radius + 2.0f), getWorld().getWater().getWaterTileYCount() - 1);
+
+		for(int x = minX; x <= maxX; x++)
 		{
-			for(int y = 0; y < getWorld().getWater().getWaterTileYCount(); y++)
+			for(int y = minY; y <= maxY; y++)
 			{
 				tmpVec2.set(x + 0.5f, y + 0.5f).sub(location);
 
