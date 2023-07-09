@@ -5,6 +5,8 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
@@ -61,6 +63,10 @@ public class GameScreen extends InputAdapter implements Screen
 	public void show()
 	{
 		Gdx.input.setInputProcessor(new InputMultiplexer(stage, this));
+		Music music = Gdx.audio.newMusic(Gdx.files.internal("ambiance.ogg"));
+		music.setLooping(true);
+		music.play();
+
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package me.winter.gmtkjam.world;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import me.winter.gmtkjam.GameScreen;
 
@@ -13,8 +12,6 @@ import me.winter.gmtkjam.GameScreen;
  */
 public class ShockWave extends Entity
 {
-	private final Texture wave;
-
 	private final Vector2 location;
 	private float radius = 0.0f;
 	private final float maxRadius = 5.0f * 16.0f;
@@ -28,8 +25,6 @@ public class ShockWave extends Entity
 	{
 		super(world);
 		this.location = location;
-
-		wave = new Texture("wave.png");
 	}
 
 	@Override

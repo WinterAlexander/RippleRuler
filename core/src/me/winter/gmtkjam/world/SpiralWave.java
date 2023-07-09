@@ -15,8 +15,6 @@ import me.winter.gmtkjam.GameScreen;
  */
 public class SpiralWave extends Entity
 {
-	private final TextureRegion wave;
-
 	private final Vector2 location;
 	private float radius = 0.0f;
 	private final float maxRadius = 4.0f * 16.0f;
@@ -33,8 +31,6 @@ public class SpiralWave extends Entity
 		super(world);
 		this.location = location;
 		this.clockwise = clockwise;
-
-		wave = new TextureRegion(new Texture("spiral_wave.png"));
 	}
 
 	@Override

@@ -1,5 +1,8 @@
 package me.winter.gmtkjam.world;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -59,9 +62,31 @@ public class WaterWorld implements ContactListener
 
 	private final Vector2 tmpVec2 = new Vector2();
 
+	private final Sound[] splashes;
+	private final Sound win, loss;
+
+	private final Music[] tracks;
+	private Music currentTrack = null;
+
 	public WaterWorld(GameScreen screen)
 	{
 		this.screen = screen;
+
+		splashes = new Sound[] {
+				Gdx.audio.newSound(Gdx.files.internal("splash1.ogg")),
+				Gdx.audio.newSound(Gdx.files.internal("splash2.ogg")),
+				Gdx.audio.newSound(Gdx.files.internal("splash3.ogg")),
+				Gdx.audio.newSound(Gdx.files.internal("splash4.ogg"))
+		};
+
+		tracks = new Music[] {
+			Gdx.audio.newMusic(Gdx.files.internal("music/track1.ogg")),
+			Gdx.audio.newMusic(Gdx.files.internal("music/track2.ogg")),
+			Gdx.audio.newMusic(Gdx.files.internal("music/track3.ogg")),
+		};
+
+		win = Gdx.audio.newSound(Gdx.files.internal("win.ogg"));
+		loss = Gdx.audio.newSound(Gdx.files.internal("loss.ogg"));
 
 		loadLevel(new Level1());
 	}
@@ -85,6 +110,12 @@ public class WaterWorld implements ContactListener
 		createBorders();
 		addEntity(water = new Water(this));
 		level.load(this);
+		if(currentTrack != null)
+			currentTrack.stop();
+		currentTrack = tracks[currentLevelIndex % tracks.length];
+		currentTrack.setLooping(true);
+		currentTrack.setVolume(0.05f);
+		currentTrack.play();
 	}
 
 	private void createBorders()
@@ -253,6 +284,9 @@ public class WaterWorld implements ContactListener
 		if(objA instanceof Dock || objB instanceof Dock)
 		{
 			paused = true;
+			if(currentTrack != null)
+				currentTrack.stop();
+			win.play(0.5f);
 			screen.showLevelCompleteUI(getTime(), Math.max(0.0f, 100.0f - energyUsed), this::nextLevel, this::retryLevel);
 			return;
 		}
@@ -262,6 +296,9 @@ public class WaterWorld implements ContactListener
 		|| objA instanceof Duck || objB instanceof Duck)
 		{
 			paused = true;
+			if(currentTrack != null)
+				currentTrack.stop();
+			loss.play(0.5f);
 			screen.showLevelFailedUI(this::retryLevel);
 			return;
 		}
@@ -309,6 +346,7 @@ public class WaterWorld implements ContactListener
 			return;
 
 
+		splashes[randomGenerator.nextInt(splashes.length)].play();
 		if(waveType == WaveType.SHOCK) {
 			addEntity(new ShockWave(this, new Vector2(x, y)));
 			energyUsed += 1.0f;
