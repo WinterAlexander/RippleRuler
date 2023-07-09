@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import me.winter.gmtkjam.GameScreen;
+import me.winter.gmtkjam.WaveType;
 import me.winter.gmtkjam.world.level.*;
 
 import java.util.Random;
@@ -25,6 +26,8 @@ import java.util.Random;
  */
 public class WaterWorld implements ContactListener
 {
+	private static final float SPIRAL_SPAWNING_DELAY = 0.5f;
+	private static final float WAVE_SPAWNING_DELAY = 0.2f;
 	public static final float WORLD_WIDTH = 256.0f;
 	public static final float WORLD_HEIGHT = 144.0f;
 
@@ -49,7 +52,7 @@ public class WaterWorld implements ContactListener
 
 	private final Random randomGenerator = new Random();
 
-	private float time = 0.0f;
+	private float time = 0.0f, lastSpawnedWave = 0.0f;
 
 	private final Vector2 tmpVec2 = new Vector2();
 
@@ -69,6 +72,7 @@ public class WaterWorld implements ContactListener
 	public void loadLevel(Level level)
 	{
 		time = 0.0f;
+		lastSpawnedWave = 0.0f;
 		entities.clear();
 		entitiesByZIndex.clear();
 		toRemove.clear();
@@ -293,5 +297,18 @@ public class WaterWorld implements ContactListener
 
 	public float getTime() {
 		return time;
+	}
+
+	public void spawnWave(WaveType waveType, float x, float y) {
+		if(lastSpawnedWave + (waveType == WaveType.SHOCK ? WAVE_SPAWNING_DELAY : SPIRAL_SPAWNING_DELAY) > time)
+			return;
+
+
+		if(waveType == WaveType.SHOCK)
+			addEntity(new ShockWave(this, new Vector2(x, y)));
+		else
+			addEntity(new SpiralWave(this, new Vector2(x, y),
+					waveType == WaveType.SPIRAL_REVERSE));
+		lastSpawnedWave = time;
 	}
 }

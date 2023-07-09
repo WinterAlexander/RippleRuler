@@ -1,26 +1,21 @@
 package me.winter.gmtkjam;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import me.winter.gmtkjam.ui.LevelFailedUI;
 import me.winter.gmtkjam.ui.LevelCompleteUI;
-import me.winter.gmtkjam.world.ShockWave;
-import me.winter.gmtkjam.world.SpiralWave;
+import me.winter.gmtkjam.ui.LevelFailedUI;
+import me.winter.gmtkjam.ui.WaveSelector;
 import me.winter.gmtkjam.world.WaterWorld;
-import me.winter.gmtkjam.world.level.Level1;
-import me.winter.gmtkjam.world.level.Level2;
 
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 
@@ -46,6 +41,8 @@ public class GameScreen extends InputAdapter implements Screen
 
 	private final Skin skin;
 
+	private WaveType waveType = WaveType.SHOCK;
+
 	public GameScreen()
 	{
 		batch = new SpriteBatch();
@@ -55,6 +52,7 @@ public class GameScreen extends InputAdapter implements Screen
 		camera.position.set(128f, 72f, 0.0f);
 		camera.update();
 		stage = new Stage(new FitViewport(1600f, 900f));
+		stage.addActor(new WaveSelector(this));
 
 		skin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
 	}
@@ -137,20 +135,13 @@ public class GameScreen extends InputAdapter implements Screen
 
 		tmpVec3.set(screenX, screenY, 0.0f);
 
-
 		camera.unproject(tmpVec3,
 				stage.getViewport().getScreenX(),
 				stage.getViewport().getScreenY(),
 				stage.getViewport().getScreenWidth(),
 				stage.getViewport().getScreenHeight());
 
-		if(button == Buttons.LEFT)
-			getWorld().addEntity(new ShockWave(world,
-					new Vector2(tmpVec3.x, tmpVec3.y)));
-		else
-			getWorld().addEntity(new SpiralWave(world,
-					new Vector2(tmpVec3.x, tmpVec3.y),
-					Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)));
+		getWorld().spawnWave(waveType, tmpVec3.x, tmpVec3.y);
 
 		return true;
 	}
@@ -209,5 +200,9 @@ public class GameScreen extends InputAdapter implements Screen
 	public Stage getStage()
 	{
 		return stage;
+	}
+
+	public void setWaveType(WaveType waveType) {
+		this.waveType = waveType;
 	}
 }
