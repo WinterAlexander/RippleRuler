@@ -82,9 +82,10 @@ public class WaterWorld implements ContactListener
 		};
 
 		tracks = new Music[] {
-			Gdx.audio.newMusic(Gdx.files.internal("music/track1.ogg")),
-			Gdx.audio.newMusic(Gdx.files.internal("music/track2.ogg")),
-			Gdx.audio.newMusic(Gdx.files.internal("music/track3.ogg")),
+				Gdx.audio.newMusic(Gdx.files.internal("music/track0.ogg")),
+				Gdx.audio.newMusic(Gdx.files.internal("music/track1.ogg")),
+				Gdx.audio.newMusic(Gdx.files.internal("music/track2.ogg")),
+				Gdx.audio.newMusic(Gdx.files.internal("music/track3.ogg")),
 		};
 
 		win = Gdx.audio.newSound(Gdx.files.internal("win.ogg"));
@@ -291,9 +292,9 @@ public class WaterWorld implements ContactListener
 			win.play(0.5f);
 
 			if(currentLevelIndex + 1 < levels.length)
-				screen.showLevelCompleteUI(getTime(), Math.max(0.0f, 100.0f - energyUsed), this::nextLevel, this::retryLevel);
+				screen.showLevelCompleteUI(currentLevelIndex, getTime(), Math.max(0.0f, 100.0f - energyUsed), this::nextLevel, this::retryLevel);
 			else
-				screen.showGameCompleteUI(getTime(), Math.max(0.0f, 100.0f - energyUsed), this::retryLevel);
+				screen.showGameCompleteUI(currentLevelIndex, getTime(), Math.max(0.0f, 100.0f - energyUsed), this::retryLevel);
 			return;
 		}
 

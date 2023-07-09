@@ -5,6 +5,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import me.winter.gmtkjam.GameScreen;
+import text.formic.Stringf;
+
+import java.text.DecimalFormat;
+
+import static java.lang.Float.isNaN;
 
 /**
  * Undocumented :(
@@ -14,7 +19,7 @@ import me.winter.gmtkjam.GameScreen;
  * @author Alexander Winter
  */
 public class LevelCompleteUI extends Window {
-    public LevelCompleteUI(GameScreen screen, Skin skin, float time, float score, Runnable retryAction, Runnable nextLevelAction) {
+    public LevelCompleteUI(GameScreen screen, Skin skin, int levelId, float time, float score, Runnable retryAction, Runnable nextLevelAction) {
         super("", skin);
 
         setModal(true);
@@ -22,11 +27,26 @@ public class LevelCompleteUI extends Window {
         pad(20f);
 
         add(new Label("Level complete!", skin, "title")).padBottom(20f).row();
-        add(new Label("Time: " + time + " seconds", skin, "big")).padBottom(20f).row();
-        add(new Label("Score: " + score, skin, "big")).padBottom(20f).row();
+
+
+        String timeKey = "level-" + levelId + "-time";
+        String scoreKey = "level-" + levelId + "-score";
+
+        float bestTime = screen.getGame().getPreferences().getFloat(timeKey, Float.NaN);
+        float bestScore = screen.getGame().getPreferences().getFloat(scoreKey, Float.NaN);
+
+        add(new Label("Time: " + Stringf.format("%.3f", time) + " seconds" + (isNaN(bestTime) ? "" : " (Best: " + Stringf.format("%.3f", bestTime) + " seconds)"), skin, "big")).padBottom(20f).row();
+        add(new Label("Score: " + score + (isNaN(bestScore) ? "" : " (Best: " + bestScore + ")"), skin, "big")).padBottom(20f).row();
         add(new Label("Score is higher the less ripples you use to complete the level. Feel free to beat your best time or best score.", skin))
                 .padBottom(20f).fill().getActor().setWrap(true);
         row();
+
+        bestTime = isNaN(bestTime) ? time : Math.min(bestTime, time);
+        bestScore = isNaN(bestScore) ?  score : Math.max(bestScore, score);
+
+        screen.getGame().getPreferences().putFloat(timeKey, bestTime);
+        screen.getGame().getPreferences().putFloat(scoreKey, bestScore);
+        screen.getGame().getPreferences().flush();
 
         Table buttonRow = new Table();
 

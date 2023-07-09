@@ -2,7 +2,7 @@ package me.winter.gmtkjam;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -36,11 +36,16 @@ public class VictoryScreen implements Screen {
 
     private final GMTKJam game;
 
+    private Music music;
+
     public VictoryScreen(GMTKJam game)
     {
         this.game = game;
         stage = new Stage(new FitViewport(1600f, 900f));
         skin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
+
+        music = Gdx.audio.newMusic(Gdx.files.internal("music/victory.ogg"));
+        music.setVolume(0.5f);
 
         Image logo = new Image(new Texture("ui/victory.png"));
         logo.setSize(1600f, 900.0f);
@@ -83,6 +88,7 @@ public class VictoryScreen implements Screen {
     public void show()
     {
         Gdx.input.setInputProcessor(stage);
+        music.play();
     }
 
     @Override
