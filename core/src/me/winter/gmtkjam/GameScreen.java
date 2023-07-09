@@ -125,7 +125,12 @@ public class GameScreen extends InputAdapter implements Screen
 	@Override
 	public boolean keyDown(int keycode)
 	{
-		if(keycode >= Keys.NUM_1 && keycode <= Keys.NUM_9)
+		if(keycode == Keys.NUM_0)
+		{
+			world.loadLevel(-1);
+			world.setPaused(false);
+		}
+		else if(keycode >= Keys.NUM_1 && keycode <= Keys.NUM_9)
 		{
 			world.loadLevel((keycode - Keys.NUM_1) % world.levels.length);
 			world.setPaused(false);

@@ -70,6 +70,7 @@ public class WaterWorld implements ContactListener
 	private final Sound win, loss;
 
 	private final Music[] tracks;
+	private final Music secretTrack;
 	private Music currentTrack = null;
 
 	public WaterWorld(GameScreen screen)
@@ -89,6 +90,7 @@ public class WaterWorld implements ContactListener
 				Gdx.audio.newMusic(Gdx.files.internal("music/track2.ogg")),
 				Gdx.audio.newMusic(Gdx.files.internal("music/track3.ogg")),
 		};
+		secretTrack = Gdx.audio.newMusic(Gdx.files.internal("music/secret.ogg"));
 
 		win = Gdx.audio.newSound(Gdx.files.internal("win.ogg"));
 		loss = Gdx.audio.newSound(Gdx.files.internal("loss.ogg"));
@@ -98,6 +100,12 @@ public class WaterWorld implements ContactListener
 
 	public void loadLevel(int index)
 	{
+		if(index == -1) {
+			currentLevelIndex = -1;
+			loadLevel(new Level0());
+			return;
+		}
+
 		currentLevelIndex = index;
 		loadLevel(levels[index]);
 	}
@@ -117,7 +125,10 @@ public class WaterWorld implements ContactListener
 		level.load(this);
 		if(currentTrack != null)
 			currentTrack.stop();
-		currentTrack = tracks[currentLevelIndex % tracks.length];
+		if(currentLevelIndex == -1)
+			currentTrack = secretTrack;
+		else
+			currentTrack = tracks[currentLevelIndex % tracks.length];
 		currentTrack.setLooping(true);
 		currentTrack.setVolume(0.05f);
 		currentTrack.play();
@@ -315,7 +326,7 @@ public class WaterWorld implements ContactListener
 
 	public void retryLevel()
 	{
-		loadLevel(levels[currentLevelIndex]);
+		loadLevel(currentLevelIndex);
 		paused = false;
 	}
 
