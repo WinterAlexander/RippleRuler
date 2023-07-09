@@ -49,6 +49,7 @@ public class WaterWorld implements ContactListener
 		new Level2(),
 		new Level3(),
 		new Level4(),
+		new Level5()
 	};
 	public int currentLevelIndex = 0;
 
@@ -257,7 +258,8 @@ public class WaterWorld implements ContactListener
 		}
 
 		if(objA instanceof Log || objB instanceof Log
-				|| objA instanceof Rock || objB instanceof Rock)
+		|| objA instanceof Rock || objB instanceof Rock
+		|| objA instanceof Duck || objB instanceof Duck)
 		{
 			paused = true;
 			screen.showLevelFailedUI(this::retryLevel);
