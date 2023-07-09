@@ -117,6 +117,10 @@ public class GameScreen extends InputAdapter implements Screen
 			world.loadLevel((keycode - Keys.NUM_1) % world.levels.length);
 			world.setPaused(false);
 		}
+		else if(keycode == Keys.R)
+		{
+			world.retryLevel();
+		}
 		else if(keycode == Keys.F12)
 			debug = !debug;
 		else

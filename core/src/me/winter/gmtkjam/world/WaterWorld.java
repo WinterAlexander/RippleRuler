@@ -42,6 +42,8 @@ public class WaterWorld implements ContactListener
 
 	private final GameScreen screen;
 
+	public float energyUsed = 0.0f;
+
 	public final Level[] levels = new Level[] {
 		new Level1(),
 		new Level2(),
@@ -73,6 +75,7 @@ public class WaterWorld implements ContactListener
 	{
 		time = 0.0f;
 		lastSpawnedWave = 0.0f;
+		energyUsed = 0.0f;
 		entities.clear();
 		entitiesByZIndex.clear();
 		toRemove.clear();
@@ -249,7 +252,7 @@ public class WaterWorld implements ContactListener
 		if(objA instanceof Dock || objB instanceof Dock)
 		{
 			paused = true;
-			screen.showLevelCompleteUI(getTime(), 0.0f, this::nextLevel, this::retryLevel);
+			screen.showLevelCompleteUI(getTime(), Math.max(0.0f, 100.0f - energyUsed), this::nextLevel, this::retryLevel);
 			return;
 		}
 
@@ -304,11 +307,15 @@ public class WaterWorld implements ContactListener
 			return;
 
 
-		if(waveType == WaveType.SHOCK)
+		if(waveType == WaveType.SHOCK) {
 			addEntity(new ShockWave(this, new Vector2(x, y)));
-		else
+			energyUsed += 1.0f;
+		}
+		else {
 			addEntity(new SpiralWave(this, new Vector2(x, y),
 					waveType == WaveType.SPIRAL_REVERSE));
+			energyUsed += 1.0f;
+		}
 		lastSpawnedWave = time;
 	}
 }

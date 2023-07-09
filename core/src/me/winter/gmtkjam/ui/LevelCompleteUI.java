@@ -23,6 +23,9 @@ public class LevelCompleteUI extends Window {
         add(new Label("Level complete!", skin, "title")).padBottom(20f).row();
         add(new Label("Time: " + time + " seconds", skin, "big")).padBottom(20f).row();
         add(new Label("Score: " + score, skin, "big")).padBottom(20f).row();
+        add(new Label("Score is higher the less waves you use to complete the level. Feel free to beat your best time or best score.", skin))
+                .padBottom(20f).fill().getActor().setWrap(true);
+        row();
 
         Table buttonRow = new Table();
 
