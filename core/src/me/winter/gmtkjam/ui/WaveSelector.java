@@ -61,6 +61,7 @@ public class WaveSelector extends Table
         shock.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                screen.click.play(0.5f);
                 spiral.setChecked(false);
                 spiralRev.setChecked(false);
                 screen.setWaveType(WaveType.SHOCK);
@@ -70,6 +71,7 @@ public class WaveSelector extends Table
         spiral.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                screen.click.play(0.5f);
                 shock.setChecked(false);
                 spiralRev.setChecked(false);
                 screen.setWaveType(WaveType.SPIRAL);
@@ -79,6 +81,7 @@ public class WaveSelector extends Table
         spiralRev.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                screen.click.play(0.5f);
                 spiral.setChecked(false);
                 shock.setChecked(false);
                 screen.setWaveType(WaveType.SPIRAL_REVERSE);

@@ -4,6 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import me.winter.gmtkjam.GameScreen;
 
 /**
  * Undocumented :(
@@ -13,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
  * @author Alexander Winter
  */
 public class LevelFailedUI extends Window {
-    public LevelFailedUI(Skin skin, Runnable retryAction) {
+    public LevelFailedUI(GameScreen screen, Skin skin, Runnable retryAction) {
         super("", skin);
 
         setModal(true);
@@ -26,6 +27,7 @@ public class LevelFailedUI extends Window {
         retryButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                screen.click.play(0.5f);
                 retryAction.run();
                 remove();
             }

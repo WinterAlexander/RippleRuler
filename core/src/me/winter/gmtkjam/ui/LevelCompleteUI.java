@@ -4,6 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import me.winter.gmtkjam.GameScreen;
 
 /**
  * Undocumented :(
@@ -13,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
  * @author Alexander Winter
  */
 public class LevelCompleteUI extends Window {
-    public LevelCompleteUI(Skin skin, float time, float score, Runnable retryAction, Runnable nextLevelAction) {
+    public LevelCompleteUI(GameScreen screen, Skin skin, float time, float score, Runnable retryAction, Runnable nextLevelAction) {
         super("", skin);
 
         setModal(true);
@@ -23,7 +24,7 @@ public class LevelCompleteUI extends Window {
         add(new Label("Level complete!", skin, "title")).padBottom(20f).row();
         add(new Label("Time: " + time + " seconds", skin, "big")).padBottom(20f).row();
         add(new Label("Score: " + score, skin, "big")).padBottom(20f).row();
-        add(new Label("Score is higher the less waves you use to complete the level. Feel free to beat your best time or best score.", skin))
+        add(new Label("Score is higher the less ripples you use to complete the level. Feel free to beat your best time or best score.", skin))
                 .padBottom(20f).fill().getActor().setWrap(true);
         row();
 
@@ -33,6 +34,7 @@ public class LevelCompleteUI extends Window {
         retryButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                screen.click.play(0.5f);
                 retryAction.run();
                 remove();
             }
@@ -44,6 +46,7 @@ public class LevelCompleteUI extends Window {
         nextButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                screen.click.play(0.5f);
                 nextLevelAction.run();
                 remove();
             }

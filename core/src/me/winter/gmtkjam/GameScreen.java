@@ -45,6 +45,8 @@ public class GameScreen extends InputAdapter implements Screen
 
 	private WaveType waveType = WaveType.SHOCK;
 
+	public Sound click;
+
 	public GameScreen()
 	{
 		batch = new SpriteBatch();
@@ -57,6 +59,8 @@ public class GameScreen extends InputAdapter implements Screen
 		stage.addActor(new WaveSelector(this));
 
 		skin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
+
+		click = Gdx.audio.newSound(Gdx.files.internal("click.ogg"));
 	}
 
 	@Override
@@ -173,15 +177,15 @@ public class GameScreen extends InputAdapter implements Screen
 
 	public void showLevelCompleteUI(float time, float score, Runnable nextLevelCallback, Runnable retryCallback)
 	{
-		getStage().addActor(new LevelCompleteUI(skin, time, score, retryCallback, nextLevelCallback));
+		getStage().addActor(new LevelCompleteUI(this, skin, time, score, retryCallback, nextLevelCallback));
 	}
 
 	public void showLevelFailedUI(Runnable retryCallback)
 	{
-		getStage().addActor(new LevelFailedUI(skin, retryCallback));
+		getStage().addActor(new LevelFailedUI(this, skin, retryCallback));
 	}
 
-	public void showGameCompleteUI()
+	public void showGameCompleteUI(float time, float score)
 	{
 
 	}
