@@ -77,7 +77,7 @@ public class Duck extends Entity implements Floating
 		bodyDef.type = BodyType.DynamicBody;
 
 		bodyDef.position.set(location);
-		bodyDef.angle = 0.0f * MathUtils.degreesToRadians;
+		bodyDef.angle = tmpVec2.set(pointA).sub(pointB).angleRad();
 		body = world.getB2world().createBody(bodyDef);
 
 		PolygonShape polygon1 = new PolygonShape();

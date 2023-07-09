@@ -48,12 +48,13 @@ public class WaterWorld implements ContactListener
 	public float energyUsed = 0.0f;
 
 	public final Level[] levels = new Level[] {
-		new Level1(),
-		new Level2(),
-		new Level3(),
-		new Level4(),
-		new Level5(),
-		new Level6()
+			new Level1(),
+			new Level2(),
+			new Level3(),
+			new Level4(),
+			new Level5(),
+			new Level6(),
+			new Level7()
 	};
 	public int currentLevelIndex = 0;
 
