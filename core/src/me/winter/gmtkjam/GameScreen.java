@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import me.winter.gmtkjam.ui.GameCompleteUI;
 import me.winter.gmtkjam.ui.LevelCompleteUI;
 import me.winter.gmtkjam.ui.LevelFailedUI;
 import me.winter.gmtkjam.ui.WaveSelector;
@@ -46,9 +47,11 @@ public class GameScreen extends InputAdapter implements Screen
 	private WaveType waveType = WaveType.SHOCK;
 
 	public Sound click;
+	private final GMTKJam game;
 
-	public GameScreen()
+	public GameScreen(GMTKJam game)
 	{
+		this.game = game;
 		batch = new SpriteBatch();
 		world = new WaterWorld(this);
 
@@ -185,9 +188,9 @@ public class GameScreen extends InputAdapter implements Screen
 		getStage().addActor(new LevelFailedUI(this, skin, retryCallback));
 	}
 
-	public void showGameCompleteUI(float time, float score)
+	public void showGameCompleteUI(float time, float score, Runnable retryCallback)
 	{
-
+		getStage().addActor(new GameCompleteUI(this, skin, time, score, retryCallback));
 	}
 
 	@Override
@@ -218,5 +221,9 @@ public class GameScreen extends InputAdapter implements Screen
 
 	public void setWaveType(WaveType waveType) {
 		this.waveType = waveType;
+	}
+
+	public GMTKJam getGame() {
+		return game;
 	}
 }

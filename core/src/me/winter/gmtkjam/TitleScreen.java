@@ -106,7 +106,7 @@ public class TitleScreen extends InputAdapter implements Screen {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         click.play(0.5f);
-        game.setScreen(new GameScreen());
+        game.setScreen(new GameScreen(game));
         return true;
     }
 }

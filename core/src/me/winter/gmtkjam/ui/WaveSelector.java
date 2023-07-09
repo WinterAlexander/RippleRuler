@@ -74,7 +74,7 @@ public class WaveSelector extends Table
                 screen.click.play(0.5f);
                 shock.setChecked(false);
                 spiralRev.setChecked(false);
-                screen.setWaveType(WaveType.SPIRAL);
+                screen.setWaveType(WaveType.SPIRAL_REVERSE);
             }
         });
 
@@ -84,7 +84,7 @@ public class WaveSelector extends Table
                 screen.click.play(0.5f);
                 spiral.setChecked(false);
                 shock.setChecked(false);
-                screen.setWaveType(WaveType.SPIRAL_REVERSE);
+                screen.setWaveType(WaveType.SPIRAL);
             }
         });
 

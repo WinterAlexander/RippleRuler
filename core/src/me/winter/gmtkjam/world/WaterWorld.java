@@ -52,7 +52,8 @@ public class WaterWorld implements ContactListener
 		new Level2(),
 		new Level3(),
 		new Level4(),
-		new Level5()
+		new Level5(),
+		new Level6()
 	};
 	public int currentLevelIndex = 0;
 
@@ -287,7 +288,11 @@ public class WaterWorld implements ContactListener
 			if(currentTrack != null)
 				currentTrack.stop();
 			win.play(0.5f);
-			screen.showLevelCompleteUI(getTime(), Math.max(0.0f, 100.0f - energyUsed), this::nextLevel, this::retryLevel);
+
+			if(currentLevelIndex + 1 < levels.length)
+				screen.showLevelCompleteUI(getTime(), Math.max(0.0f, 100.0f - energyUsed), this::nextLevel, this::retryLevel);
+			else
+				screen.showGameCompleteUI(getTime(), Math.max(0.0f, 100.0f - energyUsed), this::retryLevel);
 			return;
 		}
 
